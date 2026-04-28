@@ -11,7 +11,7 @@
         <div class="nav-controls">
             <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark/light mode">◐</button>
             <span style="color:var(--border); font-size:12px">|</span>
-            <button class="lang-btn" id="lang-btn" onclick="toggleLang()">FR</button>
+            <button class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
         </div>
     </nav>
 </header>

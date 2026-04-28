@@ -1,4 +1,8 @@
-/* CSS VARIABLES */
+/* ═══════════════════════════════════════════
+   Portfolio ISSA D. — app.css
+   ═══════════════════════════════════════════ */
+
+/* ── CSS VARIABLES ── */
 :root {
     --bg:      #080a10;
     --bg2:     #0e1118;
@@ -15,7 +19,8 @@
     --mono:    "JetBrains Mono", monospace;
     --sans:    "Syne", sans-serif;
 }
-/* LIGHT MODE */
+
+/* ── LIGHT MODE ── */
 .light {
     --bg:      #f5f7fc;
     --bg2:     #edf0f8;
@@ -29,7 +34,7 @@
     --red:     #dc2626;
 }
 
-/* RESET & BASE */
+/* ── RESET & BASE ── */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -45,7 +50,9 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--border); }
 
 
-/* HEADER */
+/* ══════════════════════════════════════
+   HEADER
+   ══════════════════════════════════════ */
 header {
     position:        fixed;
     top: 0; left: 0; right: 0;
@@ -104,7 +111,9 @@ nav a:hover { color: var(--text); }
 .lang-btn:hover { color: var(--text); border-color: var(--accent); }
 
 
-/* HERO */
+/* ══════════════════════════════════════
+   HERO
+   ══════════════════════════════════════ */
 .hero {
     min-height:     100vh;
     display:        flex;
@@ -155,7 +164,9 @@ nav a:hover { color: var(--text); }
 .shortcut:hover { border-color: var(--accent); color: var(--accent); }
 
 
-/* TERMINAL */
+/* ══════════════════════════════════════
+   TERMINAL
+   ══════════════════════════════════════ */
 .terminal-wrap {
     width:     100%;
     max-width: 740px;
@@ -213,7 +224,9 @@ nav a:hover { color: var(--text); }
 }
 
 
-/* OVERLAYS (About / Histoire / Contact) */
+/* ══════════════════════════════════════
+   OVERLAYS (About / Histoire / Contact)
+   ══════════════════════════════════════ */
 .overlay {
     display:    none;
     position:   fixed;
@@ -244,7 +257,9 @@ nav a:hover { color: var(--text); }
 .close-btn:hover { color: var(--text); border-color: var(--text); }
 
 
-/* ABOUT ME */
+/* ══════════════════════════════════════
+   ABOUT ME
+   ══════════════════════════════════════ */
 .about-inner {
     max-width: 1100px;
     margin:    0 auto;
@@ -347,7 +362,9 @@ nav a:hover { color: var(--text); }
 .histoire-teaser .tease-cta::after { content: " →"; }
 
 
-/* MON HISTOIRE */
+/* ══════════════════════════════════════
+   MON HISTOIRE
+   ══════════════════════════════════════ */
 .histoire-inner { max-width: 820px; margin: 0 auto; padding: 80px 48px; }
 .histoire-inner h1       { font-family: var(--sans); font-size: 36px; font-weight: 800; letter-spacing: -.03em; margin-bottom: 8px; }
 .histoire-inner .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 48px; }
@@ -358,7 +375,9 @@ nav a:hover { color: var(--text); }
 .no-download-notice      { font-size: 11px; color: var(--border); text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
 
 
-/* SECTIONS (shared) */
+/* ══════════════════════════════════════
+   SECTIONS (shared)
+   ══════════════════════════════════════ */
 section { max-width: 1200px; margin: 0 auto; padding: 80px 48px; }
 .section-label {
     font-size:      11px;
@@ -374,7 +393,9 @@ section { max-width: 1200px; margin: 0 auto; padding: 80px 48px; }
 .section-label span { color: var(--accent); margin-right: 4px; }
 
 
-/* PROJECT FILTERS */
+/* ══════════════════════════════════════
+   PROJECT FILTERS
+   ══════════════════════════════════════ */
 .filters { display: flex; align-items: center; gap: 8px; margin-bottom: 36px; flex-wrap: wrap; }
 .filter-btn {
     background:    none;
@@ -392,7 +413,9 @@ section { max-width: 1200px; margin: 0 auto; padding: 80px 48px; }
 .projects-count { margin-left: auto; font-size: 11px; color: var(--muted); }
 
 
-/* PROJECT GRID */
+/* ══════════════════════════════════════
+   PROJECT GRID
+   ══════════════════════════════════════ */
 .projects-grid {
     display:               grid;
     grid-template-columns: repeat(3, 1fr);
@@ -472,7 +495,41 @@ section { max-width: 1200px; margin: 0 auto; padding: 80px 48px; }
 .tag-pandas { background: #052e16; color: #4ade80; }
 .tag-numpy  { background: #052e16; color: #86efac; }
 
-/* TECH STACK */
+
+/* ══════════════════════════════════════
+   DEPLOY LOG
+   ══════════════════════════════════════ */
+.deploy-log {
+    background:    var(--bg2);
+    border:        1px solid var(--border);
+    border-radius: 10px;
+    overflow:      hidden;
+    margin-top:    72px;
+}
+.log-bar {
+    display:       flex;
+    align-items:   center;
+    gap:           8px;
+    padding:       10px 16px;
+    background:    var(--bg3);
+    border-bottom: 1px solid var(--border);
+    font-size:     11px;
+    color:         var(--muted);
+}
+.log-body { padding: 16px 20px; font-size: 11px; line-height: 2.1; }
+.log-line { display: flex; gap: 12px; }
+.log-time  { color: var(--muted); min-width: 65px; }
+.log-badge { min-width: 46px; text-align: center; padding: 0 5px; border-radius: 3px; font-size: 9px; font-weight: 700; }
+.badge-ok   { background: #052e16; color: var(--green);  }
+.badge-warn { background: #1c1400; color: var(--yellow); }
+.badge-err  { background: #1f0707; color: var(--red);    }
+.badge-info { background: #0c1a2a; color: var(--accent); }
+.log-msg { color: var(--text); }
+
+
+/* ══════════════════════════════════════
+   TECH STACK
+   ══════════════════════════════════════ */
 .tech-stack {
     border-top:  1px solid var(--border);
     padding:     22px 48px;
@@ -486,7 +543,10 @@ section { max-width: 1200px; margin: 0 auto; padding: 80px 48px; }
 .tech-item::before          { content: "· "; }
 .tech-item:first-child::before { content: ""; }
 
-/* FOOTER */
+
+/* ══════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════ */
 footer {
     border-top:      1px solid var(--border);
     padding:         22px 48px;
@@ -515,7 +575,9 @@ footer {
 .social-links a:hover { color: var(--accent); border-color: var(--accent); }
 
 
-/* CONTACT */
+/* ══════════════════════════════════════
+   CONTACT
+   ══════════════════════════════════════ */
 .contact-inner {
     max-width: 900px;
     margin:    0 auto;
@@ -568,12 +630,16 @@ footer {
 .submit-btn:hover { opacity: .85; }
 
 
-/* ANIMATIONS */
+/* ══════════════════════════════════════
+   ANIMATIONS
+   ══════════════════════════════════════ */
 .fade-in { opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
 
 
-/* RESPONSIVE */
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
 @media (max-width: 900px) {
     .projects-grid { grid-template-columns: 1fr 1fr; }
     header, .hero, section,

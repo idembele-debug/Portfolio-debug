@@ -1,62 +1,76 @@
 /**
- * Portfolio ISSA D.app.js
+ * Portfolio ISSA D. — app.js
  * All interactive features: terminal, overlays, filters, theme
  */
-/* THEME TOGGLE */
+
+/* ══════════════════════════════════════
+   THEME TOGGLE
+   ══════════════════════════════════════ */
 let isDark = true;
 
 function toggleTheme() {
     isDark = !isDark;
-    document.body.classList.toggle('light', !isDark);}
-
-    /* LANGUAGE TOGGLE */
-let isEnglish = true;
-
-function toggleLang() {
-    isEnglish = !isEnglish;
-    document.getElementById('lang-btn').textContent = isEnglish ? 'FR' : 'EN';
+    document.body.classList.toggle('light', !isDark);
 }
 
-/* TERMINAL */
+
+/* ══════════════════════════════════════
+   LANGUAGE TOGGLE
+   ══════════════════════════════════════ */
+let isEn = true;
+
+function toggleLang() {
+    isEn = !isEn;
+    document.getElementById('lang-btn').textContent = isEn ? 'EN' : 'FR';
+}
+
+
+/* ══════════════════════════════════════
+   TERMINAL
+   ══════════════════════════════════════ */
+
 /** Available commands and their outputs */
 const cmds = {
-    help: `<span class="t-green">Commandes disponibles:</span>
-    <span class="t-accent">whoami</span>     A propos de moi
-    <span class="t-accent">about</span>      Qui je suis
-    <span class="t-accent">projects</span>   Mes projets
-    <span class="t-accent">skills</span>     Mes compétences
-    <span class="t-accent">contact</span>    Contactez-moi
-    <span class="t-accent">story</span>      Mon histoire
-    <span class="t-accent">clear</span>      Effacer le terminal`,
+    help: `<span class="t-green">Available commands:</span>
+  <span class="t-accent">whoami</span>    → about me
+  <span class="t-accent">about</span>     → who I am
+  <span class="t-accent">projects</span>  → my work
+  <span class="t-accent">skills</span>    → tech stack
+  <span class="t-accent">contact</span>   → get in touch
+  <span class="t-accent">histoire</span>  → my story
+  <span class="t-accent">clear</span>     → clear terminal`,
+
     whoami:   '__ABOUT__',
     about:    '__ABOUT__',
     contact:  '__CONTACT__',
-    story: '__HISTOIRE__',
+    histoire: '__HISTOIRE__',
     clear:    '__CLEAR__',
 
-    projects: `<span class="t-yellow">6 projets trouvés.</span> défilement vers les projets...`,
+    projects: `<span class="t-yellow">4 projects found.</span> Scrolling to projects...`,
 
-    skills: `<span class="t-green">Langages:</span>  Python · PHP · JavaScript · C · HTML · CSS · React JS
-    <span class="t-green">Frameworks:</span> Flask · Laravel
-    <span class="t-green">Outils:</span>      VS Code · MySQL · GitHub
-    <span class="t-green">Compétences douces:</span>       Communication · Adaptability · Detail-oriented`,};
+    skills: `<span class="t-green">Languages:</span>  Python · PHP · JavaScript · C · HTML · CSS · React JS
+  <span class="t-green">Frameworks:</span> Flask · Pandas · Numpy · Matplotlib · Laravel
+  <span class="t-green">Tools:</span>      VS Code · MySQL · Git
+  <span class="t-green">Soft:</span>       Communication · Adaptability · Detail-oriented`,
+};
 
-   /** Terminal state */
+/** Terminal state */
 let termLines = [
     '<div class="terminal-line"><span class="t-accent" style="font-size:20px;font-weight:700;letter-spacing:3px">ISSA D.#</span></div>',
-    '<div class="terminal-line t-comment">Bienvenue dans le terminal de ISSA D. Tapez "help" pour les commandes.</div>',
-    '<div class="terminal-line">&nbsp;</div>',];
+    '<div class="terminal-line t-comment">Welcome to ISSA D. terminal. Type "help" for commands.</div>',
+    '<div class="terminal-line">&nbsp;</div>',
+];
 let cmdHistory = [];
 let histIdx    = -1;
 const termOut  = document.getElementById('terminal-output');
 
-   /** Render terminal DOM */
+/** Render terminal DOM */
 function renderTerm(lines) {
     termOut.innerHTML = lines.join('') + `
-    <div class="terminal-input-line">
-    <span class="t-prompt">issad</span><span style="color:var(--muted)">@</span><span class="t-path">portfolio</span><span style="color:var(--muted)">:~$</span>
-    <input class="terminal-input" id="term-input" autocomplete="off" spellcheck="false" placeholder="tapez 'help'">
-    </div>`;
+        <div class="terminal-input-line">
+            <span class="t-prompt">issa</span><span style="color:var(--muted)">@</span><span class="t-path">portfolio</span><span style="color:var(--muted)">:~$</span>
+            <input class="terminal-input" id="term-input" autocomplete="off" spellcheck="false" placeholder="type 'help'">
+        </div>`;
     document.getElementById('term-input').addEventListener('keydown', onTermKey);
 }
 
@@ -72,7 +86,7 @@ function onTermKey(e) {
         histIdx = -1;
 
         // Echo the command
-        termLines.push(`<div class="terminal-line"><span class="t-prompt">issad</span><span style="color:var(--muted)">@</span><span class="t-path">portfolio</span><span style="color:var(--muted)">:~$</span> <span class="t-cmd">${esc(cmd)}</span></div>`);
+        termLines.push(`<div class="terminal-line"><span class="t-prompt">issa</span><span style="color:var(--muted)">@</span><span class="t-path">portfolio</span><span style="color:var(--muted)">:~$</span> <span class="t-cmd">${esc(cmd)}</span></div>`);
 
         const response = cmds[cmd];
 
@@ -80,15 +94,15 @@ function onTermKey(e) {
             termLines = [];
 
         } else if (response === '__ABOUT__') {
-            termLines.push('<div class="terminal-output"><span class="t-green">Ouverture de la page "A propos de moi"...</span></div>');
+            termLines.push('<div class="terminal-output"><span class="t-green">Opening about me...</span></div>');
             setTimeout(openAbout, 400);
 
         } else if (response === '__CONTACT__') {
-            termLines.push('<div class="terminal-output"><span class="t-green">Ouverture de la page "Contact"...</span></div>');
+            termLines.push('<div class="terminal-output"><span class="t-green">Opening contact...</span></div>');
             setTimeout(openContact, 400);
 
         } else if (response === '__HISTOIRE__') {
-            termLines.push('<div class="terminal-output"><span class="t-green">Ouverture de la page "Mon histoire"...</span></div>');
+            termLines.push('<div class="terminal-output"><span class="t-green">Opening my story...</span></div>');
             setTimeout(openHistoire, 400);
 
         } else if (response) {
@@ -98,39 +112,45 @@ function onTermKey(e) {
             }
 
         } else {
-            termLines.push(`<div class="terminal-output"><span class="t-red">commande non trouvés: ${esc(cmd)}</span> essayez <span class="t-accent">help</span></div>`);
+            termLines.push(`<div class="terminal-output"><span class="t-red">command not found: ${esc(cmd)}</span> — try <span class="t-accent">help</span></div>`);
         }
 
         termLines.push('<div class="terminal-line">&nbsp;</div>');
         renderTerm(termLines);
         document.getElementById('term-input').focus();
 
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            if (histIdx < cmdHistory.length - 1) {
-                histIdx++;
-                inp.value = cmdHistory[histIdx];
-            }
-            
-        } else if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            if (histIdx > 0) {
-                histIdx--;
-                inp.value = cmdHistory[histIdx];
-            } else {
-                histIdx   = -1;
-                inp.value = '';
-            }
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (histIdx < cmdHistory.length - 1) {
+            histIdx++;
+            inp.value = cmdHistory[histIdx];
+        }
+
+    } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (histIdx > 0) {
+            histIdx--;
+            inp.value = cmdHistory[histIdx];
+        } else {
+            histIdx   = -1;
+            inp.value = '';
         }
     }
-   /** Focus terminal and scroll to top */
+}
+
+/** Escape HTML for safe terminal output */
+function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/** Focus terminal and scroll to top */
 function focusTerminal() {
     const input = document.getElementById('term-input');
     if (input) input.focus();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-   /** Keyboard shortcut: press "/" to focus terminal */
+/** Keyboard shortcut: press "/" to focus terminal */
 document.addEventListener('keydown', (e) => {
     if (
         e.key === '/' &&
@@ -142,9 +162,13 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-   // Init terminal
-    renderTerm(termLines);
-/*OVERLAYS */
+// Init terminal
+renderTerm(termLines);
+
+
+/* ══════════════════════════════════════
+   OVERLAYS
+   ══════════════════════════════════════ */
 
 function openAbout() {
     document.getElementById('about-overlay').classList.add('active');
@@ -159,7 +183,8 @@ function closeAbout() {
 function openHistoire() {
     closeAbout(); // close about if open
     document.getElementById('histoire-overlay').classList.add('active');
-    document.body.style.overflow = 'hidden';}
+    document.body.style.overflow = 'hidden';
+}
 
 function closeHistoire() {
     document.getElementById('histoire-overlay').classList.remove('active');
@@ -167,7 +192,7 @@ function closeHistoire() {
 }
 
 function openContact() {
-       // Close any open overlay first
+    // Close any open overlay first
     document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
     document.getElementById('contact-overlay').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -178,7 +203,7 @@ function closeContact() {
     document.body.style.overflow = '';
 }
 
-   /** Close overlay on Escape key */
+/** Close overlay on Escape key */
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
@@ -186,17 +211,25 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-/* CV DOWNLOAD (Handled via Laravel route /cv/download) */
+
+/* ══════════════════════════════════════
+   CV DOWNLOAD
+   (Handled via Laravel route /cv/download)
+   ══════════════════════════════════════ */
 function downloadCV() {
     window.location.href = '/cv/download';
 }
 
-/*PROJECT FILTERS */
+
+/* ══════════════════════════════════════
+   PROJECT FILTERS
+   ══════════════════════════════════════ */
 function filterProjects(type, btn) {
-       // Toggle active button
+    // Toggle active button
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-       // Show/hide cards
+
+    // Show/hide cards
     let count = 0;
     document.querySelectorAll('.project-card').forEach(card => {
         const show = type === 'all' || card.dataset.type === type;
@@ -209,11 +242,15 @@ function filterProjects(type, btn) {
 }
 
 
-/*
-    CONTACT FORM (JS feedback)
-    The form submits to Laravel via POST.
-    This handles the visual submit state.*/
+/* ══════════════════════════════════════
+   CONTACT FORM (JS feedback)
+   The form submits to Laravel via POST.
+   This handles the visual submit state.
+   ══════════════════════════════════════ */
 function submitForm(e) {
+    // If using Laravel backend, remove e.preventDefault() to allow form submission
+    e.preventDefault(); // Remove this line when connecting to real backend
+
     const btn = e.target.querySelector('.submit-btn');
     btn.textContent      = '✓ Message sent!';
     btn.style.background = 'var(--green)';
@@ -222,13 +259,19 @@ function submitForm(e) {
         btn.textContent      = 'Send message';
         btn.style.background = '';
     }, 3000);
+
+    e.target.reset();
 }
 
-/* SCROLL ANIMATIONS*/
+
+/* ══════════════════════════════════════
+   SCROLL ANIMATIONS
+   ══════════════════════════════════════ */
 const scrollObserver = new IntersectionObserver(
     (entries) => entries.forEach(e => {
         if (e.isIntersecting) e.target.classList.add('visible');
     }),
     { threshold: 0.1 }
 );
+
 document.querySelectorAll('.fade-in').forEach(el => scrollObserver.observe(el));
