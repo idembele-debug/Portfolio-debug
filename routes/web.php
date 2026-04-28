@@ -18,6 +18,24 @@ Route::get('/', function () {
     return view('pages.home');
 })->name('home');
 
+Route::get('/about', function () {
+    return view('pages.home', ['openOverlay' => 'about']);
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('pages.home', ['openOverlay' => 'contact']);
+})->name('contact');
+
+Route::get('/lang/{locale}', function (Request $request, string $locale) {
+    if (! in_array($locale, ['fr', 'en'], true)) {
+        $locale = config('app.locale', 'fr');
+    }
+
+    $request->session()->put('locale', $locale);
+
+    return back();
+})->name('lang.switch');
+
 Route::get('/cv/download', function () {
     $path = public_path('pdf/ISSAD.pdf');
 

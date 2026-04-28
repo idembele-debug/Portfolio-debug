@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,12 @@
     @include('partials.about')
     @include('partials.history')
     @include('partials.contact')
+
+    <script>
+        window.__OPEN_OVERLAY__ = @json($openOverlay ?? null);
+        window.__LOCALE__ = @json(app()->getLocale());
+        window.__I18N__ = @json(__('portfolio'));
+    </script>
 
     @stack('scripts')
 </body>

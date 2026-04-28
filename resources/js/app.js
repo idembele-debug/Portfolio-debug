@@ -6,22 +6,33 @@
 /* ══════════════════════════════════════
    THEME TOGGLE
    ══════════════════════════════════════ */
-let isDark = true;
-
-function toggleTheme() {
-    isDark = !isDark;
-    document.body.classList.toggle('light', !isDark);
+function getI18n(path, fallback = '') {
+    const obj = window.__I18N__ || {};
+    return path.split('.').reduce((acc, k) => (acc && acc[k] != null ? acc[k] : null), obj) ?? fallback;
 }
 
-
 /* ══════════════════════════════════════
-   LANGUAGE TOGGLE
+   THEME TOGGLE (persisted)
    ══════════════════════════════════════ */
-let isEn = true;
+let isDark = true;
 
-function toggleLang() {
-    isEn = !isEn;
-    document.getElementById('lang-btn').textContent = isEn ? 'EN' : 'FR';
+function applyTheme(nextIsDark) {
+    isDark = nextIsDark;
+    document.body.classList.toggle('light', !isDark);
+    try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch {}
+}
+
+// Init theme from storage (default: dark)
+try {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light') applyTheme(false);
+    else applyTheme(true);
+} catch {
+    applyTheme(true);
+}
+
+function toggleTheme() {
+    applyTheme(!isDark);
 }
 
 
@@ -30,24 +41,30 @@ function toggleLang() {
    ══════════════════════════════════════ */
 
 /** Available commands and their outputs */
+function terminalHelpHtml() {
+    const title = getI18n('terminal.help_title', 'Available commands:');
+    const lines = getI18n('terminal.help_lines', {});
+
+    const order = ['whoami', 'projects', 'skills', 'contact', 'histoire', 'clear'];
+    const rows = order.map((cmd) => {
+        const desc = lines?.[cmd] ?? '';
+        return `  <span class="t-accent">${cmd}</span>    → ${esc(desc)}`;
+    }).join('\n');
+
+    return `<span class="t-green">${esc(title)}</span>\n${rows}`;
+}
+
 const cmds = {
-    help: `<span class="t-green">Available commands:</span>
-  <span class="t-accent">whoami</span>    → about me
-  <span class="t-accent">about</span>     → who I am
-  <span class="t-accent">projects</span>  → my work
-  <span class="t-accent">skills</span>    → tech stack
-  <span class="t-accent">contact</span>   → get in touch
-  <span class="t-accent">histoire</span>  → my story
-  <span class="t-accent">clear</span>     → clear terminal`,
+    help: terminalHelpHtml(),
 
     whoami:   '__ABOUT__',
-    about:    '__ABOUT__',
     contact:  '__CONTACT__',
     histoire: '__HISTOIRE__',
     clear:    '__CLEAR__',
 
-    projects: `<span class="t-yellow">4 projects found.</span> Scrolling to projects...`,
+    projects: '__PROJECTS__',
 
+    // Keep as-is for now (can be translated later if desired)
     skills: `<span class="t-green">Languages:</span>  Python · PHP · JavaScript · C · HTML · CSS · React JS
   <span class="t-green">Frameworks:</span> Flask · Pandas · Numpy · Matplotlib · Laravel
   <span class="t-green">Tools:</span>      VS Code · MySQL · Git
@@ -57,7 +74,7 @@ const cmds = {
 /** Terminal state */
 let termLines = [
     '<div class="terminal-line"><span class="t-accent" style="font-size:20px;font-weight:700;letter-spacing:3px">ISSA D.#</span></div>',
-    '<div class="terminal-line t-comment">Welcome to ISSA D. terminal. Type "help" for commands.</div>',
+    `<div class="terminal-line t-comment">${esc(getI18n('terminal.welcome', 'Welcome to ISSA D. terminal. Type "help" for commands.'))}</div>`,
     '<div class="terminal-line">&nbsp;</div>',
 ];
 let cmdHistory = [];
@@ -69,7 +86,7 @@ function renderTerm(lines) {
     termOut.innerHTML = lines.join('') + `
         <div class="terminal-input-line">
             <span class="t-prompt">issa</span><span style="color:var(--muted)">@</span><span class="t-path">portfolio</span><span style="color:var(--muted)">:~$</span>
-            <input class="terminal-input" id="term-input" autocomplete="off" spellcheck="false" placeholder="type 'help'">
+            <input class="terminal-input" id="term-input" autocomplete="off" spellcheck="false" placeholder="${esc(getI18n('terminal.placeholder', "type 'help'"))}">
         </div>`;
     document.getElementById('term-input').addEventListener('keydown', onTermKey);
 }
@@ -94,16 +111,22 @@ function onTermKey(e) {
             termLines = [];
 
         } else if (response === '__ABOUT__') {
-            termLines.push('<div class="terminal-output"><span class="t-green">Opening about me...</span></div>');
+            termLines.push(`<div class="terminal-output"><span class="t-green">${esc(getI18n('terminal.opening_about', 'Opening “About”...'))}</span></div>`);
             setTimeout(openAbout, 400);
 
         } else if (response === '__CONTACT__') {
-            termLines.push('<div class="terminal-output"><span class="t-green">Opening contact...</span></div>');
+            termLines.push(`<div class="terminal-output"><span class="t-green">${esc(getI18n('terminal.opening_contact', 'Opening “Contact”...'))}</span></div>`);
             setTimeout(openContact, 400);
 
         } else if (response === '__HISTOIRE__') {
-            termLines.push('<div class="terminal-output"><span class="t-green">Opening my story...</span></div>');
+            termLines.push(`<div class="terminal-output"><span class="t-green">${esc(getI18n('terminal.opening_story', 'Opening “Story”...'))}</span></div>`);
             setTimeout(openHistoire, 400);
+
+        } else if (response === '__PROJECTS__') {
+            const text = getI18n('terminal.projects_scroll', 'Scrolling to projects...')
+                .replace(':count', '6');
+            termLines.push(`<div class="terminal-output"><span class="t-yellow">${esc(text)}</span></div>`);
+            setTimeout(() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' }), 400);
 
         } else if (response) {
             termLines.push(`<div class="terminal-output">${response}</div>`);
@@ -112,7 +135,9 @@ function onTermKey(e) {
             }
 
         } else {
-            termLines.push(`<div class="terminal-output"><span class="t-red">command not found: ${esc(cmd)}</span> — try <span class="t-accent">help</span></div>`);
+            const msgTpl = getI18n('terminal.not_found', 'command not found: :cmd — try help');
+            const msg = msgTpl.replace(':cmd', cmd);
+            termLines.push(`<div class="terminal-output"><span class="t-red">${esc(msg)}</span></div>`);
         }
 
         termLines.push('<div class="terminal-line">&nbsp;</div>');
@@ -237,8 +262,9 @@ function filterProjects(type, btn) {
         if (show) count++;
     });
 
-    document.getElementById('proj-count').textContent =
-        count + ' project' + (count > 1 ? 's' : '');
+    const singularPlural = getI18n('filters.count', ':count project|:count projects').split('|');
+    const template = (count > 1 ? singularPlural[1] : singularPlural[0]) || ':count projects';
+    document.getElementById('proj-count').textContent = template.replace(':count', String(count));
 }
 
 
@@ -248,9 +274,6 @@ function filterProjects(type, btn) {
    This handles the visual submit state.
    ══════════════════════════════════════ */
 function submitForm(e) {
-    // If using Laravel backend, remove e.preventDefault() to allow form submission
-    e.preventDefault(); // Remove this line when connecting to real backend
-
     const btn = e.target.querySelector('.submit-btn');
     btn.textContent      = '✓ Message sent!';
     btn.style.background = 'var(--green)';
@@ -259,9 +282,41 @@ function submitForm(e) {
         btn.textContent      = 'Send message';
         btn.style.background = '';
     }, 3000);
-
-    e.target.reset();
 }
+
+/* ══════════════════════════════════════
+   NAV / DEEP LINKS
+   ══════════════════════════════════════ */
+function openOverlayByKey(key) {
+    if (key === 'about') return openAbout();
+    if (key === 'contact') return openContact();
+    if (key === 'histoire') return openHistoire();
+}
+
+function initDeepLinks() {
+    const openFromServer = window.__OPEN_OVERLAY__;
+    if (openFromServer) openOverlayByKey(openFromServer);
+
+    const hash = (window.location.hash || '').replace('#', '');
+    if (hash) openOverlayByKey(hash);
+}
+
+// Initialize project count label
+try { filterProjects('all', document.querySelector('.filter-btn.active') || document.querySelector('.filter-btn')); } catch {}
+initDeepLinks();
+
+/* Expose functions used by inline handlers */
+window.toggleTheme = toggleTheme;
+window.focusTerminal = focusTerminal;
+window.openAbout = openAbout;
+window.closeAbout = closeAbout;
+window.openContact = openContact;
+window.closeContact = closeContact;
+window.openHistoire = openHistoire;
+window.closeHistoire = closeHistoire;
+window.downloadCV = downloadCV;
+window.filterProjects = filterProjects;
+window.submitForm = submitForm;
 
 
 /* ══════════════════════════════════════

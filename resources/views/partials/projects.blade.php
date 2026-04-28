@@ -4,10 +4,10 @@
 
     {{-- Filters --}}
     <div class="filters">
-        <button class="filter-btn active" onclick="filterProjects('all', this)">Tous</button>
-        <button class="filter-btn" onclick="filterProjects('academic', this)">Académique</button>
-        <button class="filter-btn" onclick="filterProjects('personal', this)">Personnel</button>
-        <span class="projects-count" id="proj-count">6 projects</span>
+        <button class="filter-btn active" onclick="filterProjects('all', this)">{{ __('portfolio.filters.all') }}</button>
+        <button class="filter-btn" onclick="filterProjects('academic', this)">{{ __('portfolio.filters.academic') }}</button>
+        <button class="filter-btn" onclick="filterProjects('personal', this)">{{ __('portfolio.filters.personal') }}</button>
+        <span class="projects-count" id="proj-count"></span>
     </div>
 
     {{-- Grid --}}

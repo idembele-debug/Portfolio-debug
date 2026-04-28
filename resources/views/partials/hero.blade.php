@@ -1,11 +1,12 @@
 <div class="hero">
 
-    <h1>Etudiant en cycle<br><em>Ingénieur d'état.</em></h1>
-    <p class="hero-label">EN INGÉNIERIE &amp; INTELLIGENCE ARTIFICIELLE</p>
+    @php($heroTitle = __('portfolio.hero.title'))
+    <h1>{!! nl2br(e($heroTitle)) !!}</h1>
+    <p class="hero-label">{{ __('portfolio.hero.label') }}</p>
     <div class="hero-meta">
-        <span>Dépuis 2023</span>
+        <span>{{ __('portfolio.hero.since') }}</span>
         <span class="shortcut" onclick="focusTerminal()">
-            Appuyez <kbd>/</kbd> pour focaliser le terminal
+            {!! str_replace('/', '<kbd>/</kbd>', e(__('portfolio.hero.shortcut'))) !!}
         </span>
     </div>
 

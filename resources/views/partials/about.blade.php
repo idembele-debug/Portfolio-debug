@@ -1,5 +1,5 @@
 <div class="overlay" id="about-overlay">
-    <button class="close-btn" onclick="closeAbout()">✕ close</button>
+    <button class="close-btn" onclick="closeAbout()">{{ __('portfolio.ui.close') }}</button>
 
     <div class="about-inner">
         <div class="section-label"><span></span> A PROPOS DE MOI</div>
@@ -64,7 +64,7 @@
                     <div class="info-card">
                         <div class="label">LinkedIn</div>
                         <div class="value">
-                            <a href="https://linkedin.com/in/ISSA D DEMBELE" target="_blank" rel="noopener">
+                            <a href="https://www.linkedin.com/in/issa-d-dembele-a46a34356/" target="_blank" rel="noopener">
                                 ISSA D DEMBELE
                             </a>
                         </div>
@@ -119,10 +119,10 @@
 
                 <div class="about-ctas">
                     <button class="btn-primary" onclick="downloadCV()">
-                        Télécharger mon CV
+                        {{ __('portfolio.ui.download_cv') }}
                     </button>
                     <button class="btn-outline" onclick="openContact()">
-                        Me contacter
+                        {{ __('portfolio.ui.contact_me') }}
                     </button>
                 </div>
 

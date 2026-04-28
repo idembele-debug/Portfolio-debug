@@ -4,14 +4,20 @@
     </a>
 
     <nav>
-        <a onclick="openAbout()">A Propos de Moi</a>
-        <a href="#projects">Projets</a>
-        <a onclick="openContact(); return false;">Contact</a>
+        <a href="{{ route('about') }}">{{ __('portfolio.nav.about') }}</a>
+        <a href="{{ route('home') }}#projects">{{ __('portfolio.nav.projects') }}</a>
+        <a href="{{ route('contact') }}">{{ __('portfolio.nav.contact') }}</a>
 
         <div class="nav-controls">
-            <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark/light mode">◐</button>
+            <button class="theme-btn" onclick="toggleTheme()" title="{{ __('portfolio.ui.theme_title') }}">◐</button>
             <span style="color:var(--border); font-size:12px">|</span>
-            <button class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
+            <a
+                class="lang-btn"
+                id="lang-btn"
+                href="{{ route('lang.switch', ['locale' => app()->getLocale() === 'fr' ? 'en' : 'fr']) }}"
+            >
+                {{ app()->getLocale() === 'fr' ? 'EN' : 'FR' }}
+            </a>
         </div>
     </nav>
 </header>

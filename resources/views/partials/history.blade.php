@@ -1,6 +1,6 @@
 <!-- HISTOIRE -->
 <div class="overlay" id="histoire-overlay">
-    <button class="close-btn" onclick="closeHistoire()">✕ fermer</button>
+    <button class="close-btn" onclick="closeHistoire()">{{ __('portfolio.ui.close') }}</button>
 
     <div class="histoire-inner">
         <h1>Mon HISTOIRE</h1>

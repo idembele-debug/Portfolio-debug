@@ -1,5 +1,5 @@
 <div class="overlay" id="contact-overlay">
-    <button class="close-btn" onclick="closeContact()">✕ close</button>
+    <button class="close-btn" onclick="closeContact()">{{ __('portfolio.ui.close') }}</button>
 
     <div class="contact-inner">
         <div class="section-label"><span></span> CONTACT</div>
@@ -21,7 +21,7 @@
             <div class="contact-row">
                 <span class="contact-key">linkedin</span>
                 <span class="contact-val">
-                    <a href="https://linkedin.com/in/ISSA-D-DEMBELE" target="_blank" rel="noopener">
+                    <a href="https://www.linkedin.com/in/issa-d-dembele-a46a34356/" target="_blank" rel="noopener">
                         ISSA D DEMBELE
                     </a>
                 </span>
