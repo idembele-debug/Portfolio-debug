@@ -1,0 +1,20 @@
+# Permission levels
+PERMISSION_READ = "read"
+PERMISSION_WRITE = "write"
+PERMISSION_ADMIN = "admin"
+
+# Resource permissions
+PERMISSION_PROFILE_READ = "profile:read"
+PERMISSION_PROFILE_WRITE = "profile:write"
+PERMISSION_SKILLS_READ = "skills:read"
+PERMISSION_SKILLS_WRITE = "skills:write"
+PERMISSION_PROJECTS_READ = "projects:read"
+PERMISSION_PROJECTS_WRITE = "projects:write"
+PERMISSION_CONTACT_READ = "contact:read"
+PERMISSION_CONTACT_WRITE = "contact:write"
+PERMISSION_HISTOIRE_READ = "histoire:read"
+PERMISSION_HISTOIRE_WRITE = "histoire:write"
+PERMISSION_DEPLOY_LOGS_READ = "deploy_logs:read"
+PERMISSION_DEPLOY_LOGS_WRITE = "deploy_logs:write"
+PERMISSION_USERS_READ = "users:read"
+PERMISSION_USERS_WRITE = "users:write"

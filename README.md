@@ -1,66 +1,128 @@
-## Portfolio Laravel
+# Portfolio ISSA D.
 
-Portfolio personnel (Laravel 9 + Blade + Vite).
+Portfolio personnel moderne construit avec **React 19 + FastAPI + PostgreSQL**.
 
-### Prérequis
-- **PHP**: 8.0+
-- **Composer**
-- **Node.js / npm**
+## 🏗️ Architecture
 
-### Installation
-
-```bash
-composer install
-cp .env.example .env
-php artisan key:generate
-npm install
+```
+Portfolio-debug/
+├── frontend/          # React 19 + Vite + Tailwind CSS v4 (JavaScript)
+├── backend/           # FastAPI + SQLAlchemy + PostgreSQL
+├── backup-assets/     # Fichiers originaux (HTML, images, PDF)
+│   ├── portfolio-issad.html   # Portfolio HTML original (NE PAS MODIFIER)
+│   ├── images/
+│   └── pdf/
+└── README.md
 ```
 
-### Lancer en local
+## 🚀 Technologies
 
-Deux options (recommandé: Vite en dev).
+### Frontend
+- **React 19** — UI Framework
+- **Vite** — Build tool
+- **Tailwind CSS v4** — Styling
+- **React Router DOM** — Routing (/ , /login, /dashboard, *)
+- **Axios** — HTTP client (services modulaires par ressource)
+- **React Hook Form** — Form management
+- **Zod** — Validation
 
-- **Option A — dev (hot reload)**:
+### Backend
+- **FastAPI** — API Framework
+- **SQLAlchemy 2.0** — ORM (avec relations Many-to-Many)
+- **Alembic** — Migrations
+- **PostgreSQL** — Database
+- **JWT** — Authentication
+- **Pydantic v2** — Validation
 
-```bash
-npm run dev
-php artisan serve
+### Déploiement
+- **Frontend** → Vercel
+- **Backend** → Render
+- **Database** → Neon
+
+## 📁 Structure détaillée
+
+### Frontend (`frontend/`)
+```
+frontend/
+├── public/
+│   ├── images/
+│   └── pdf/
+├── src/
+│   ├── assets/              # Images statiques
+│   ├── components/
+│   │   ├── layout/          # Header, Footer
+│   │   ├── sections/        # Hero, Projects, About, Contact, Histoire, DeployLog
+│   │   └── ui/              # Button, Modal, Card, Loader (à venir)
+│   ├── pages/               # Home, Login, Dashboard, NotFound
+│   ├── hooks/               # Custom hooks (à venir)
+│   ├── context/             # ThemeContext (dark/light)
+│   ├── services/
+│   │   ├── api.js           # Instance Axios centralisée
+│   │   └── api/             # Services par ressource (auth, profile, project, skill, contact, deployLog, histoire)
+│   ├── utils/               # helpers, validators, formatters (à venir)
+│   ├── constants/           # Constantes (à venir)
+│   ├── config/              # Configuration (à venir)
+│   ├── styles/              # Styles additionnels (à venir)
+│   ├── App.jsx              # React Router (root)
+│   └── main.jsx             # Point d'entrée
+├── index.html
+├── vite.config.js
+└── package.json
 ```
 
-- **Option B — build (sans serveur Vite)**:
-
-```bash
-npm run build
-php artisan serve
+### Backend (`backend/`)
+```
+backend/
+├── app/
+│   ├── api/routes/          # Routes CRUD (auth, profile, skills, projects, contact, histoire, deploy-logs)
+│   ├── core/                # Configuration, sécurité JWT
+│   ├── database/            # SQLAlchemy session
+│   ├── models/              # Modèles (User, Profile, Skill, Project, Technology, ContactMessage, etc.)
+│   ├── schemas/             # Schémas Pydantic
+│   ├── constants/           # roles.py, status.py, permissions.py
+│   ├── uploads/             # profile/, projects/, cv/
+│   └── main.py              # Point d'entrée FastAPI
+├── alembic/                 # Migrations
+└── requirements.txt
 ```
 
-Puis ouvre `http://127.0.0.1:8000`.
+## 🔐 Admin Initialization
 
-### Routes utiles
+```bash
+curl -X POST http://localhost:8000/api/auth/init
+```
 
-- **Home**: `/` (nommée `home`)
-- **Téléchargement CV (force download)**: `/cv/download` (nommée `cv.download`)
-- **Accès direct au PDF**: `/pdf/ISSAD.pdf`
+## 🌐 Variables d'environnement
 
-### Assets (photo + CV)
+### Backend (`.env`)
+```
+DATABASE_URL=postgresql://user:pass@host:5432/portfolio_db
+SECRET_KEY=your-secret-key
+ADMIN_EMAIL=i.dembele@hestim.ma
+ADMIN_PASSWORD=admin123
+```
 
-- **CV**: `public/pdf/ISSAD.pdf`
-  - accessible via `/pdf/ISSAD.pdf`
-  - téléchargeable via `/cv/download`
-- **Photo**: `public/images/issaphoto.JPG`
-  - utilisée dans `resources/views/partials/about.blade.php`
+### Frontend (`.env`)
+```
+VITE_API_URL=http://localhost:8000/api
+VITE_APP_NAME=ISSA D. Portfolio
+```
 
-### Structure (vue rapide)
+## 🚢 Déploiement
 
-- **Routes**: `routes/web.php`
-- **Vues**: `resources/views/layouts` + `resources/views/pages` + `resources/views/partials`
-- **Assets**:
-  - source: `resources/css/app.css`, `resources/js/app.js`
-  - build: `public/build/*` (généré par Vite)
+### Frontend → Vercel
+1. Connecter le repo GitHub
+2. Framework: Vite
+3. Build: `npm run build`
+4. Output: `dist`
+5. Ajouter `VITE_API_URL`
 
-### Dépannage
+### Backend → Render
+1. Web Service depuis le repo
+2. Build: `pip install -r requirements.txt`
+3. Start: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+4. Ajouter les variables d'environnement
 
-- **Page blanche / erreur 500**: regarde la sortie dans le navigateur (Ignition) et/ou `storage/logs/laravel.log`.
-- **Assets CSS/JS ne chargent pas**:
-  - en dev: lance `npm run dev`
-  - en prod: lance `npm run build` (doit générer `public/build/manifest.json`)
+### Database → Neon
+1. Créer un projet PostgreSQL sur Neon
+2. Copier la connection string dans les variables d'environnement Render
