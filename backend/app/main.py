@@ -7,9 +7,6 @@ from app.core.config import settings
 from app.api.router import api_router
 from app.database.session import engine, Base
 
-# Create tables
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.VERSION,
@@ -35,6 +32,12 @@ app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads"
 
 # API routes
 app.include_router(api_router, prefix="/api")
+
+
+@app.on_event("startup")
+def on_startup():
+    """Create database tables on startup."""
+    Base.metadata.create_all(bind=engine)
 
 
 @app.get("/")

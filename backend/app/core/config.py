@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: Optional[str] = os.getenv(
         "DATABASE_URL",
-        "postgresql://postgres:postgres@localhost:5432/portfolio_db"
+        "sqlite:///./portfolio.db"
     )
 
     # JWT
