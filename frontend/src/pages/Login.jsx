@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/api/auth';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,14 +18,14 @@ export default function Login() {
       localStorage.setItem('token', data.access_token);
       navigate('/dashboard');
     } catch {
-      setError('Invalid credentials');
+      setError(t('login.error'));
     }
   };
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-mono flex items-center justify-center px-6">
       <div className="w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">{t('login.title')}</h1>
         {error && (
           <div className="bg-[#1f0707] text-[var(--red)] border border-[var(--red)] rounded-md p-3 mb-4 text-sm">
             {error}
@@ -31,7 +33,7 @@ export default function Login() {
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-[var(--muted)] mb-1">Email</label>
+            <label className="block text-sm text-[var(--muted)] mb-1">{t('login.email')}</label>
             <input
               type="email"
               value={email}
@@ -41,7 +43,7 @@ export default function Login() {
             />
           </div>
           <div>
-            <label className="block text-sm text-[var(--muted)] mb-1">Password</label>
+            <label className="block text-sm text-[var(--muted)] mb-1">{t('login.password')}</label>
             <input
               type="password"
               value={password}
@@ -54,7 +56,7 @@ export default function Login() {
             type="submit"
             className="w-full bg-[var(--accent)] text-black font-bold py-2.5 rounded-md cursor-pointer hover:opacity-85 transition-opacity"
           >
-            Sign in
+            {t('login.submit')}
           </button>
         </form>
       </div>
