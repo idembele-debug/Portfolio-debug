@@ -29,7 +29,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
         {t('close')}
       </button>
 
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 md:px-12 py-20">
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 md:px-12 py-20 md:py-24">
         {/* Section header */}
         <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-11 flex items-center gap-3">
           <span className="block w-7 h-px bg-[var(--border)]"></span>
@@ -45,15 +45,13 @@ export default function ContactOverlay({ isOpen, onClose }) {
               {t('contact.subtitle')}
             </p>
 
-            {/* Contact info cards */}
+            {/* Contact info cards — plain text, no link styling except LinkedIn */}
             <div className="space-y-2.5 mb-6">
               <div className="bg-[var(--bg2)] border border-[var(--border)] rounded-lg p-3.5 flex items-center gap-3 hover:border-[var(--accent)] transition-colors">
                 <span className="text-lg">✉</span>
                 <div>
                   <div className="text-[10px] text-[var(--muted)] uppercase tracking-[0.08em]">{t('contact.email')}</div>
-                  <a href="mailto:i.dembele@hestim.ma" className="text-[13px] text-[var(--accent)] no-underline hover:underline">
-                    i.dembele@hestim.ma
-                  </a>
+                  <div className="text-[13px] text-[var(--text)]">i.dembele@hestim.ma</div>
                 </div>
               </div>
               <div className="bg-[var(--bg2)] border border-[var(--border)] rounded-lg p-3.5 flex items-center gap-3 hover:border-[var(--accent)] transition-colors">
@@ -67,8 +65,8 @@ export default function ContactOverlay({ isOpen, onClose }) {
                 <span className="text-lg">🔗</span>
                 <div>
                   <div className="text-[10px] text-[var(--muted)] uppercase tracking-[0.08em]">{t('contact.social.linkedin')}</div>
-                  <a href="https://linkedin.com/in/ISSA-D-DEMBELE" target="_blank" rel="noopener noreferrer" className="text-[13px] text-[var(--accent)] no-underline hover:underline">
-                    /in/ISSA-D-DEMBELE
+                  <a href="https://www.linkedin.com/in/issa-d-dembele-a46a34356/" target="_blank" rel="noopener noreferrer" className="text-[13px] text-[var(--accent)] no-underline hover:underline">
+                    ISSA D DEMBELE
                   </a>
                 </div>
               </div>
@@ -76,9 +74,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
                 <span className="text-lg">💻</span>
                 <div>
                   <div className="text-[10px] text-[var(--muted)] uppercase tracking-[0.08em]">{t('contact.social.github')}</div>
-                  <a href="https://github.com/idembele-debug" target="_blank" rel="noopener noreferrer" className="text-[13px] text-[var(--accent)] no-underline hover:underline">
-                    /idembele-debug
-                  </a>
+                  <div className="text-[13px] text-[var(--text)]">idembele-debug</div>
                 </div>
               </div>
             </div>
@@ -97,7 +93,7 @@ export default function ContactOverlay({ isOpen, onClose }) {
               >
                 <span>⎇</span> GitHub
               </a>
-              <a href="https://linkedin.com/in/ISSA-D-DEMBELE"
+              <a href="https://www.linkedin.com/in/issa-d-dembele-a46a34356/"
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center text-[11px] gap-1.5 text-[var(--muted)] no-underline bg-[var(--bg2)] border border-[var(--border)] px-3 py-2 rounded-md hover:text-[var(--accent)] hover:border-[var(--accent)] transition-all"
               >

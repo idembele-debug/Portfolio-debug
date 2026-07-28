@@ -15,6 +15,16 @@
   --orange: #fb923c;
   --mono: "JetBrains Mono", monospace;
   --sans: "Syne", sans-serif;
+
+  /* Design System Spacing Tokens */
+  --space-section: 6rem;
+  --space-section-sm: 4rem;
+  --space-card: 1.5rem;
+  --space-card-sm: 1.25rem;
+  --space-content: 1.25rem;
+  --space-button: 0.75rem 1.5rem;
+  --space-grid: 1.5rem;
+  --space-grid-sm: 1rem;
 }
 
 .light {

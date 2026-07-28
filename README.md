@@ -1,6 +1,7 @@
 # Portfolio ISSA D.
 
 Portfolio personnel moderne construit avec **React 19 + FastAPI + PostgreSQL**.
+Design inspiré du terminal, avec thème dark/light, animations fluides et expérience interactive.
 
 ## 🏗️ Architecture
 
@@ -39,32 +40,78 @@ Portfolio-debug/
 - **Backend** → Render
 - **Database** → Neon
 
+## ✨ Fonctionnalités
+
+### Hero Section
+- Titre impactant "Étudiant en Cycle Ingénieur d'État" avec effet typographique
+- Terminal interactif avec 22 commandes disponibles
+- Raccourci clavier `/` pour focus terminal
+- Animations d'entrée fluides
+
+### About Overlay
+- Photo de profil avec effet glassmorphism
+- Cartes d'information non-cliquables (Email, Téléphone, Localisation, GitHub, Langues)
+- LinkedIn reste cliquable
+- 3 actions principales : Télécharger CV, Lire mon histoire, Me contacter
+- Grille de compétences avec effets de survol
+
+### Mon Histoire
+- Timeline chronologique avec marqueurs visuels
+- Contenu chargé depuis l'API ou fallback local
+- Traductions FR/EN
+
+### Projets
+- Grille responsive 1/2/3 colonnes
+- Filtres par type (Tous, Académique, Personnel)
+- Aperçus de code avec dégradés de couleurs
+- Tags technologiques
+- Projets statiques intégrés (Portfolio, AidFinder)
+
+### Contact
+- Formulaire de contact avec validation
+- Cartes d'information non-cliquables (sauf LinkedIn)
+- Statut de disponibilité
+- Liens sociaux GitHub/LinkedIn
+
+### Terminal
+- 22 commandes interactives
+- Changement de thème dark/light
+- Changement de langue FR/EN
+- Téléchargement du CV
+- Ouverture des réseaux sociaux
+
+### Design System
+- Espacements cohérents (section, card, content, button, grid)
+- Palette de couleurs terminal (bg, accent, muted, green, red, yellow)
+- Animations fluides (fadeUp, fadeIn, photoReveal)
+- Responsive : Desktop, Laptop, Tablet, Mobile
+
 ## 📁 Structure détaillée
 
 ### Frontend (`frontend/`)
 ```
 frontend/
 ├── public/
-│   ├── images/
-│   └── pdf/
+│   ├── ISSAD.pdf              # CV téléchargeable
+│   └── issaphoto.JPG          # Photo de profil
 ├── src/
-│   ├── assets/              # Images statiques
+│   ├── assets/                # Images statiques
 │   ├── components/
-│   │   ├── layout/          # Header, Footer
-│   │   ├── sections/        # Hero, Projects, About, Contact, Histoire, DeployLog
-│   │   └── ui/              # Button, Modal, Card, Loader (à venir)
-│   ├── pages/               # Home, Login, Dashboard, NotFound
-│   ├── hooks/               # Custom hooks (à venir)
-│   ├── context/             # ThemeContext (dark/light)
+│   │   ├── layout/            # Header, Footer
+│   │   ├── sections/          # Hero, Projects, About, Contact, Histoire, DeployLog
+│   │   └── ui/                # Button, Modal, Card, Loader
+│   ├── pages/                 # Home, Login, Dashboard, NotFound
+│   ├── hooks/                 # Custom hooks
+│   ├── context/               # ThemeContext (dark/light), LanguageContext
 │   ├── services/
-│   │   ├── api.js           # Instance Axios centralisée
-│   │   └── api/             # Services par ressource (auth, profile, project, skill, contact, deployLog, histoire)
-│   ├── utils/               # helpers, validators, formatters (à venir)
-│   ├── constants/           # Constantes (à venir)
-│   ├── config/              # Configuration (à venir)
-│   ├── styles/              # Styles additionnels (à venir)
-│   ├── App.jsx              # React Router (root)
-│   └── main.jsx             # Point d'entrée
+│   │   ├── api.js             # Instance Axios centralisée
+│   │   └── api/               # Services par ressource (auth, profile, project, skill, contact, deployLog, histoire)
+│   ├── utils/                 # helpers, validators, formatters
+│   ├── constants/             # Traductions FR/EN
+│   ├── config/                # Configuration
+│   ├── styles/                # Styles additionnels
+│   ├── App.jsx                # React Router (root)
+│   └── main.jsx               # Point d'entrée
 ├── index.html
 ├── vite.config.js
 └── package.json
@@ -74,15 +121,15 @@ frontend/
 ```
 backend/
 ├── app/
-│   ├── api/routes/          # Routes CRUD (auth, profile, skills, projects, contact, histoire, deploy-logs)
-│   ├── core/                # Configuration, sécurité JWT
-│   ├── database/            # SQLAlchemy session
-│   ├── models/              # Modèles (User, Profile, Skill, Project, Technology, ContactMessage, etc.)
-│   ├── schemas/             # Schémas Pydantic
-│   ├── constants/           # roles.py, status.py, permissions.py
-│   ├── uploads/             # profile/, projects/, cv/
-│   └── main.py              # Point d'entrée FastAPI
-├── alembic/                 # Migrations
+│   ├── api/routes/            # Routes CRUD (auth, profile, skills, projects, contact, histoire, deploy-logs)
+│   ├── core/                  # Configuration, sécurité JWT
+│   ├── database/              # SQLAlchemy session
+│   ├── models/                # Modèles (User, Profile, Skill, Project, Technology, ContactMessage, etc.)
+│   ├── schemas/               # Schémas Pydantic
+│   ├── constants/             # roles.py, status.py, permissions.py
+│   ├── uploads/               # profile/, projects/, cv/
+│   └── main.py                # Point d'entrée FastAPI
+├── alembic/                   # Migrations
 └── requirements.txt
 ```
 

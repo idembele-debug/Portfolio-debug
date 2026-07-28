@@ -1,6 +1,7 @@
 # Portfolio — Frontend
 
 React frontend for the ISSA D. Portfolio application.
+Design inspiré du terminal, avec thème dark/light, animations fluides et expérience interactive.
 
 ## 🚀 Tech Stack
 
@@ -17,39 +18,37 @@ React frontend for the ISSA D. Portfolio application.
 ```
 frontend/
 ├── public/
-│   ├── images/
-│   └── pdf/
+│   ├── ISSAD.pdf              # CV téléchargeable
+│   └── issaphoto.JPG          # Photo de profil
 ├── src/
 │   ├── components/
-│   │   ├── layout/          # Header, Footer (each with index.jsx)
-│   │   ├── sections/        # Hero, Projects, About, Contact, Histoire, DeployLog, TechStack
-│   │   └── ui/              # Button, Modal, Card, Loader (to be added)
+│   │   ├── layout/            # Header, Footer (each with index.jsx)
+│   │   ├── sections/          # Hero, Projects, About, Contact, Histoire, DeployLog
+│   │   └── ui/                # Button, Modal, Card, Loader
 │   ├── pages/
-│   │   ├── Home.jsx         # Main landing page (Hero + Projects + DeployLog + overlays)
-│   │   ├── Login.jsx        # Admin login
-│   │   ├── Dashboard.jsx    # Admin dashboard (protected)
-│   │   └── NotFound.jsx     # 404 page
+│   │   ├── Home.jsx           # Main landing page (Hero + Projects + DeployLog + overlays)
+│   │   ├── Login.jsx          # Admin login
+│   │   ├── Dashboard.jsx      # Admin dashboard (protected)
+│   │   └── NotFound.jsx       # 404 page
 │   ├── context/
-│   │   └── ThemeContext.jsx  # Dark/light theme
+│   │   ├── ThemeContext.jsx    # Dark/light theme
+│   │   └── LanguageContext.jsx # FR/EN translations
 │   ├── services/
-│   │   ├── api.js           # Centralized Axios instance (base URL, auth interceptor)
-│   │   └── api/             # Modular API services per resource
-│   │       ├── index.js     # Re-exports all services
-│   │       ├── auth.js      # login, initAdmin, getMe
-│   │       ├── profile.js   # getProfile, updateProfile
-│   │       ├── project.js   # CRUD projects
-│   │       ├── skill.js     # CRUD skills
-│   │       ├── contact.js   # sendMessage, getMessages, etc.
-│   │       ├── deployLog.js # CRUD deploy logs
-│   │       └── histoire.js  # CRUD histoire chapters
-│   ├── utils/               # helpers, validators, formatters (to be added)
-│   ├── constants/           # Constants (to be added)
-│   ├── config/              # Configuration (to be added)
-│   ├── hooks/               # Custom hooks (to be added)
-│   ├── styles/              # Additional styles (to be added)
-│   ├── App.jsx              # React Router setup (/, /login, /dashboard, *)
-│   ├── main.jsx             # Entry point
-│   └── index.css            # Global styles + Tailwind + CSS variables
+│   │   ├── api.js             # Centralized Axios instance (base URL, auth interceptor)
+│   │   └── api/               # Modular API services per resource
+│   │       ├── index.js       # Re-exports all services
+│   │       ├── auth.js        # login, initAdmin, getMe
+│   │       ├── profile.js     # getProfile, updateProfile
+│   │       ├── project.js     # CRUD projects
+│   │       ├── skill.js       # CRUD skills
+│   │       ├── contact.js     # sendMessage, getMessages, etc.
+│   │       ├── deployLog.js   # CRUD deploy logs
+│   │       └── histoire.js    # CRUD histoire chapters
+│   ├── constants/
+│   │   └── translations.js    # FR/EN translations for all UI text
+│   ├── App.jsx                # React Router setup (/, /login, /dashboard, *)
+│   ├── main.jsx               # Entry point
+│   └── index.css              # Global styles + Tailwind + CSS variables + Design System
 ├── index.html
 ├── vite.config.js
 ├── package.json
@@ -112,6 +111,51 @@ npm run preview
 
 ## 🎨 Features
 
+### Hero Section
+- Titre impactant "Étudiant en Cycle Ingénieur d'État" avec effet typographique
+- Terminal interactif avec 22 commandes disponibles
+- Raccourci clavier `/` pour focus terminal
+- Animations d'entrée fluides
+
+### About Overlay
+- Photo de profil avec effet glassmorphism
+- Cartes d'information non-cliquables (Email, Téléphone, Localisation, GitHub, Langues)
+- LinkedIn reste cliquable
+- 3 actions principales : Télécharger CV, Lire mon histoire, Me contacter
+- Grille de compétences avec effets de survol
+
+### Mon Histoire
+- Timeline chronologique avec marqueurs visuels
+- Contenu chargé depuis l'API ou fallback local
+- Traductions FR/EN
+
+### Projets
+- Grille responsive 1/2/3 colonnes
+- Filtres par type (Tous, Académique, Personnel)
+- Aperçus de code avec dégradés de couleurs
+- Tags technologiques
+- Projets statiques intégrés (Portfolio, AidFinder)
+
+### Contact
+- Formulaire de contact avec validation
+- Cartes d'information non-cliquables (sauf LinkedIn)
+- Statut de disponibilité
+- Liens sociaux GitHub/LinkedIn
+
+### Terminal
+- 22 commandes interactives
+- Changement de thème dark/light
+- Changement de langue FR/EN
+- Téléchargement du CV
+- Ouverture des réseaux sociaux
+
+### Design System
+- Espacements cohérents (section, card, content, button, grid)
+- Palette de couleurs terminal (bg, accent, muted, green, red, yellow)
+- Animations fluides (fadeUp, fadeIn, photoReveal)
+- Responsive : Desktop, Laptop, Tablet, Mobile
+
+### Core
 - **Dark/Light theme** with CSS variables
 - **Interactive terminal** in hero section
 - **Project filtering** by type
@@ -121,3 +165,4 @@ npm run preview
 - **API integration** with modular Axios services
 - **React Router** for client-side navigation
 - **100% JavaScript** (no TypeScript)
+- **FR/EN translations** for all UI text

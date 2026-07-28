@@ -23,7 +23,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-mono flex items-center justify-center px-6">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-mono flex items-center justify-center px-6 sm:px-8">
       <div className="w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center">{t('login.title')}</h1>
         {error && (

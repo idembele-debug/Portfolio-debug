@@ -25,7 +25,7 @@ export default function DeployLogSection() {
   }, []);
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12 mt-12 sm:mt-[72px] pb-16 sm:pb-20">
+    <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-16 py-20">
       <div className="bg-[var(--bg2)] border border-[var(--border)] rounded-xl overflow-hidden">
         <div className="flex items-center gap-2 px-4 py-2.5 bg-[var(--bg3)] border-b border-[var(--border)] text-[11px] text-[var(--muted)]">
           <span className="w-3 h-3 rounded-full bg-[#ff5f57]"></span>

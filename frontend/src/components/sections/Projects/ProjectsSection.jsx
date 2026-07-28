@@ -19,6 +19,27 @@ const TYPE_STYLES = {
   freelance: 'text-[var(--yellow)] border-[var(--yellow)]',
 };
 
+const FALLBACK_PROJECTS = [
+  {
+    id: 'portfolio',
+    title: 'projects.portfolio',
+    description: 'projects.portfolio.desc',
+    project_type: 'personal',
+    preview_color: 'teal',
+    preview_code: '📁 Portfolio\n\nReact · Tailwind CSS\nFastAPI · Terminal UI\n\n$ npm run dev\n✓ Build successful\n✓ Deployed',
+    tags: 'React,Tailwind CSS,FastAPI,JavaScript',
+  },
+  {
+    id: 'aidfinder',
+    title: 'projects.aidfinder',
+    description: 'projects.aidfinder.desc',
+    project_type: 'personal',
+    preview_color: 'purple',
+    preview_code: '🔍 AidFinder\n\nSmart Search Engine\nPredictive Filters\n\n→ Finding best matches\n→ Personalized results',
+    tags: 'React,Python,AI,Node.js',
+  },
+];
+
 export default function ProjectsSection() {
   const [projects, setProjects] = useState([]);
   const [filter, setFilter] = useState('all');
@@ -27,9 +48,12 @@ export default function ProjectsSection() {
   const loadProjects = async () => {
     try {
       const { data } = await getProjects();
-      setProjects(data);
+      // Merge API projects with fallback projects
+      const apiProjects = Array.isArray(data) ? data : [];
+      const merged = [...apiProjects, ...FALLBACK_PROJECTS];
+      setProjects(merged);
     } catch {
-      setProjects([]);
+      setProjects(FALLBACK_PROJECTS);
     }
   };
 
@@ -40,7 +64,7 @@ export default function ProjectsSection() {
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.project_type === filter);
 
   return (
-    <section id="projects" className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12 py-16 sm:py-20">
+    <section id="projects" className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-16 py-20 md:py-24">
       <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-8 sm:mb-11 flex items-center gap-3">
         <span className="block w-7 h-px bg-[var(--border)]"></span>
         <span className="text-[var(--accent)] mr-1">#</span> {t('projects.title')}
@@ -81,13 +105,17 @@ export default function ProjectsSection() {
               </div>
 
               <div className="flex items-start justify-between mb-1.5 gap-2">
-                <span className="font-sans font-bold text-sm text-[var(--text)] break-words">{project.title}</span>
+                <span className="font-sans font-bold text-sm text-[var(--text)] break-words">
+                  {project.title?.startsWith('projects.') ? t(project.title) : project.title}
+                </span>
                 <span className={`text-[9px] px-1.5 py-0.5 rounded border uppercase tracking-[0.05em] whitespace-nowrap shrink-0 ${TYPE_STYLES[project.project_type] || 'text-[var(--muted)] border-[var(--border)]'}`}>
                   {project.project_type}
                 </span>
               </div>
 
-              <p className="text-[11px] text-[var(--muted)] mb-3.5 leading-[1.6]">{project.description}</p>
+              <p className="text-[11px] text-[var(--muted)] mb-3.5 leading-[1.6]">
+                {project.description?.startsWith('projects.') ? t(project.description) : project.description}
+              </p>
 
               {project.tags && (
                 <div className="flex flex-wrap gap-1.5">

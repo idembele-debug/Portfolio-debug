@@ -33,7 +33,7 @@ export default function HistoireOverlay({ isOpen, onClose }) {
   const hasChapters = chapters.length > 0;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[var(--bg)] overflow-y-auto animate-fadeIn">
+    <div id="histoire" className="fixed inset-0 z-50 bg-[var(--bg)] overflow-y-auto animate-fadeIn">
       <button
         onClick={onClose}
         className="fixed top-4 right-4 md:right-12 bg-transparent border border-[var(--border)] text-[var(--muted)] font-mono text-xs px-3.5 py-1.5 rounded cursor-pointer z-50 hover:text-[var(--text)] hover:border-[var(--text)] transition-all"
@@ -41,7 +41,7 @@ export default function HistoireOverlay({ isOpen, onClose }) {
         {t('close')}
       </button>
 
-      <div className="max-w-[820px] mx-auto px-4 sm:px-6 md:px-12 py-20">
+      <div className="max-w-[820px] mx-auto px-4 sm:px-6 md:px-12 py-20 md:py-24">
         <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-11 flex items-center gap-3">
           <span className="block w-7 h-px bg-[var(--border)]"></span>
           <span className="text-[var(--accent)] mr-1">#</span> {t('histoire.title')}

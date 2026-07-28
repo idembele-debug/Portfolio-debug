@@ -58,6 +58,7 @@ export default function HeroSection() {
   useEffect(() => { langRef.current = lang; }, [lang]);
   useEffect(() => { isDarkRef.current = isDark; }, [isDark]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setLines(createInitialLines(t));
   }, [lang, t]);
@@ -127,9 +128,15 @@ export default function HeroSection() {
       window.open('https://github.com/idembele-debug', '_blank');
     } else if (command === 'linkedin') {
       output(`<span class="t-accent">${curT('terminal.linkedin.text')}</span>`);
-      window.open('https://linkedin.com/in/ISSA-D-DEMBELE', '_blank');
+      window.open('https://www.linkedin.com/in/issa-d-dembele-a46a34356/', '_blank');
     } else if (command === 'cv') {
-      output(`<span class="t-yellow">${curT('terminal.cv.text')}</span>`);
+      output(`<span class="t-accent">${curT('terminal.cv.text')}</span>`);
+      const link = document.createElement('a');
+      link.href = '/ISSAD.pdf';
+      link.download = 'ISSAD_Dembele_CV.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } else if (command === 'email') {
       output(`<span class="t-accent">${curT('terminal.email.text')}</span>`);
     } else if (command === 'theme') {
@@ -178,24 +185,35 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-start px-4 sm:px-6 md:px-12 pt-28 pb-20 max-w-[1200px] mx-auto w-full">
-      <p className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-5">
+    <div className="min-h-screen flex flex-col justify-center items-start px-6 sm:px-8 lg:px-12 xl:px-16 pt-28 pb-24 max-w-7xl mx-auto w-full">
+      {/* Section label */}
+      <p className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-6">
         <span className="text-[var(--accent)]">// </span>{t('hero.subtitle')}
       </p>
-      <h1 className="font-sans text-[clamp(28px,5.5vw,68px)] font-extrabold leading-[1.06] tracking-[-0.03em] max-w-[780px] mb-9">
-        {t('hero.title.line1')}<br />
+
+      {/* Impactful title - big, bold, wow effect */}
+      <h1 className="font-sans text-[clamp(34px,7vw,88px)] font-extrabold leading-[1.04] tracking-[-0.04em] max-w-[900px] mb-3">
+        <span className="text-[var(--text)]">{t('hero.title.line1')} </span>
         <span dangerouslySetInnerHTML={{ __html: t('hero.title.line2') }} />
       </h1>
-      <div className="text-[11px] text-[var(--muted)] mb-11 flex items-center gap-4 flex-wrap">
+
+      {/* Tagline */}
+      <p className="text-[14px] text-[var(--muted)] mb-8 max-w-[600px] leading-relaxed">
+        {t('hero.title.tagline')}
+      </p>
+
+      {/* Meta info */}
+      <div className="text-[11px] text-[var(--muted)] mb-12 flex items-center gap-4 flex-wrap">
         <span>{t('hero.since')}</span>
         <span
-          className="bg-[var(--bg3)] border border-[var(--border)] px-2 py-0.5 rounded text-[11px] cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors select-none"
+          className="bg-[var(--bg3)] border border-[var(--border)] px-2.5 py-1 rounded text-[11px] cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors select-none"
           onClick={focusTerminal}
         >
           {t('hero.press')} <kbd className="font-mono border border-[var(--border)] rounded px-1 mx-0.5">/</kbd> {t('hero.focus')}
         </span>
       </div>
 
+      {/* Terminal */}
       <div className="w-full max-w-[740px] animate-fadeUp" onClick={focusTerminal}>
         <div className="bg-[var(--bg2)] border border-[var(--border)] rounded-xl overflow-hidden shadow-[0_28px_72px_rgba(0,0,0,0.5)]">
           <div className="flex items-center gap-2 px-4 py-2.5 bg-[var(--bg3)] border-b border-[var(--border)]">

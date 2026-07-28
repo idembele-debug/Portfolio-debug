@@ -5,7 +5,7 @@ export default function NotFound() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-mono flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-mono flex flex-col items-center justify-center px-6 sm:px-8">
       <h1 className="text-6xl font-bold text-[var(--accent)] mb-4">{t('notfound.title')}</h1>
       <p className="text-lg text-[var(--muted)] mb-4">{t('notfound.subtitle')}</p>
       <p className="text-sm text-[var(--muted)] mb-8">{t('notfound.text')}</p>

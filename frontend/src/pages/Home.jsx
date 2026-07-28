@@ -18,7 +18,6 @@ export default function Home() {
       <Header
         onOpenAbout={() => setAboutOpen(true)}
         onOpenContact={() => setContactOpen(true)}
-        onOpenHistoire={() => setHistoireOpen(true)}
       />
 
       <main>
@@ -29,7 +28,7 @@ export default function Home() {
 
       <Footer />
 
-      <AboutOverlay isOpen={aboutOpen} onClose={() => setAboutOpen(false)} />
+      <AboutOverlay isOpen={aboutOpen} onClose={() => setAboutOpen(false)} onOpenContact={() => setContactOpen(true)} />
       <ContactOverlay isOpen={contactOpen} onClose={() => setContactOpen(false)} />
       <HistoireOverlay isOpen={histoireOpen} onClose={() => setHistoireOpen(false)} />
     </div>
