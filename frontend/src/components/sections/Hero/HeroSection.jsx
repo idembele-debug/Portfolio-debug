@@ -44,7 +44,7 @@ function createInitialLines(t) {
 }
 
 export default function HeroSection() {
-  const [lines, setLines] = useState(() => createInitialLines({ t: (k) => k }));
+  const [lines, setLines] = useState(() => createInitialLines((k) => k));
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
   const terminalRef = useRef(null);

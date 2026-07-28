@@ -88,6 +88,7 @@ body {
 .t-red { color: var(--red); }
 .t-accent { color: var(--accent); }
 .t-white { color: var(--text); }
+.t-muted { color: var(--muted); }
 
 /* Animations */
 @keyframes fadeUp {
