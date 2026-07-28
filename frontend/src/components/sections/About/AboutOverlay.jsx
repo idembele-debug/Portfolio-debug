@@ -68,13 +68,9 @@ export default function AboutOverlay({ isOpen, onClose, onOpenContact }) {
 
   const handleOpenStory = useCallback(() => {
     onClose();
-    // Small delay to allow overlay close animation, then scroll to histoire
-    setTimeout(() => {
-      const histoireSection = document.getElementById('histoire');
-      if (histoireSection) {
-        histoireSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 300);
+    // Close about overlay, parent Home component will detect and open HistoireOverlay
+    // The parent needs a callback - we'll use a custom event to signal
+    window.dispatchEvent(new CustomEvent('openHistoire'));
   }, [onClose]);
 
   if (!isOpen) return null;

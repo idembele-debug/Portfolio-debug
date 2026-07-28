@@ -38,8 +38,8 @@ function createInitialLines(t) {
   return [
     { type: 'output', html: `<span class="t-comment"># ${t('terminal.welcome')}</span>` },
     { type: 'output', html: `<span class="t-green">✓</span> ${t('terminal.system.ready')}` },
-    { type: 'output', html: `<span class="t-yellow">⟳</span> ${t('terminal.loading')}` },
-    { type: 'output', html: `<span class="t-accent">⟹</span> ${t('terminal.help.hint')}` },
+    { type: 'output', html: `<span class="t-yellow">*</span> ${t('terminal.loading')}` },
+    { type: 'output', html: `<span class="t-accent">*</span> ${t('terminal.help.hint')}` },
   ];
 }
 
@@ -141,17 +141,11 @@ export default function HeroSection() {
       output(`<span class="t-accent">${curT('terminal.email.text')}</span>`);
     } else if (command === 'theme') {
       toggle();
-      output(`<span class="t-green">${curDark ? curT('terminal.theme.light') : curT('terminal.theme.dark')}</span>`);
-    } else if (command === 'language') {
-      if (args === 'en') {
-        setLang('en');
-        output(`<span class="t-green">${curT('terminal.language.en')}</span>`);
-      } else if (args === 'fr') {
-        setLang('fr');
-        output(`<span class="t-green">${curT('terminal.language.fr')}</span>`);
-      } else {
-        output(`<span class="t-yellow">${curT('terminal.language.en')}</span>`);
-      }
+      output(`<span class="t-green">${curDark ? 'Switched to light theme' : 'Switched to dark theme'}</span>`);
+    } else if (command === 'language' || command === 'langage') {
+      const newLang = args === 'en' || args === 'english' ? 'en' : 'fr';
+      setLang(newLang);
+      output(`<span class="t-green">${newLang === 'en' ? '✓ Language switched to English' : '✓ Langue changée en Français'}</span>`);
     } else if (command === 'time') {
       output(`<span class="t-white">${new Date().toLocaleTimeString(curLang === 'fr' ? 'fr-FR' : 'en-US')}</span>`);
     } else if (command === 'date') {
