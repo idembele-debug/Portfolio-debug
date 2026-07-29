@@ -24,10 +24,10 @@ frontend/
 │   ├── assets/                # Images statiques (hero.png, react.svg, vite.svg)
 │   ├── components/
 │   │   ├── layout/            # Header, Footer (each with index.jsx)
-│   │   ├── sections/          # Hero, Projects, About, Contact, Histoire, DeployLog
+│   │   ├── sections/          # Hero, Projects, About, Contact, Histoire
 │   │   └── ui/                # Button, Modal, Card, Loader
 │   ├── pages/
-│   │   ├── Home.jsx           # Main landing page (Hero + Projects + DeployLog + overlays)
+│   │   ├── Home.jsx           # Main landing page (Hero + Projects + overlays)
 │   │   ├── Login.jsx          # Admin login
 │   │   ├── Dashboard.jsx      # Admin dashboard (protected)
 │   │   └── NotFound.jsx       # 404 page
@@ -43,7 +43,6 @@ frontend/
 │   │       ├── project.js     # CRUD projects
 │   │       ├── skill.js       # CRUD skills
 │   │       ├── contact.js     # sendMessage, getMessages, etc.
-│   │       ├── deployLog.js   # CRUD deploy logs
 │   │       └── histoire.js    # CRUD histoire chapters
 │   ├── constants/
 │   │   └── translations.js    # FR/EN translations for all UI text
@@ -155,7 +154,7 @@ npm run preview
 ### Dashboard (Admin)
 - Page de login avec JWT
 - Gestion des messages reçus
-- Gestion des projets, compétences, logs de déploiement
+- Gestion des projets, compétences
 - Routes protégées par authentification
 
 ### Design System
@@ -171,7 +170,7 @@ npm run preview
 - **Contact form** with API integration
 - **Responsive design** (mobile, tablet, desktop)
 - **CSS animations** (fadeIn, fadeUp, photoReveal)
-- **API integration** with modular Axios services (profile, skills, projects, contact, histoire, deploy-logs, auth)
+- **API integration** with modular Axios services (profile, skills, projects, contact, histoire, auth)
 - **React Router** for client-side navigation (Home, Login, Dashboard, 404)
 - **100% JavaScript** (no TypeScript)
 - **FR/EN translations** for all UI text

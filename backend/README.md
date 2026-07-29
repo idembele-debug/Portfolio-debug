@@ -23,15 +23,14 @@ backend/
 │   │   │   ├── skills.py         # Skills CRUD
 │   │   │   ├── projects.py       # Projects CRUD + filtre par type
 │   │   │   ├── contact.py        # Contact messages (POST public, GET/PUT/DELETE auth)
-│   │   │   ├── histoire.py       # Histoire chapters CRUD
-│   │   │   └── deploy_logs.py    # Deploy logs CRUD
+│   │   │   └── histoire.py       # Histoire chapters CRUD
 │   │   └── router.py             # Main router (inclut toutes les routes)
 │   ├── core/
 │   │   ├── config.py             # Settings (pydantic-settings)
 │   │   └── security.py           # JWT, password hashing (passlib+bcrypt)
 │   ├── database/
 │   │   └── session.py            # SQLAlchemy engine & session
-│   ├── models/                   # SQLAlchemy models (8 modèles)
+│   ├── models/                   # SQLAlchemy models (7 modèles)
 │   │   ├── user.py               # User (admin auth)
 │   │   ├── profile.py            # Profile (nom, titre, bio, email, etc.)
 │   │   ├── skill.py              # Skill (nom, catégorie, ordre)
@@ -39,9 +38,8 @@ backend/
 │   │   ├── technology.py         # Technology
 │   │   ├── project_technology.py # Association table (Project <-> Technology)
 │   │   ├── contact_message.py    # Contact messages
-│   │   ├── histoire_chapter.py   # Histoire chapters
-│   │   └── deploy_log.py         # Deploy logs
-│   ├── schemas/                  # Pydantic schemas (8 schémas)
+│   │   └── histoire_chapter.py   # Histoire chapters
+│   ├── schemas/                  # Pydantic schemas (7 schémas)
 │   ├── constants/                # (réservé) roles.py, status.py, permissions.py
 │   ├── uploads/                  # profile/, projects/, cv/
 │   └── main.py                   # FastAPI app entry point
@@ -128,7 +126,6 @@ Default credentials (from `.env`):
 | GET | `/api/skills/` | Liste des compétences |
 | GET | `/api/projects/` | Liste des projets (filtre: ?project_type=academic) |
 | GET | `/api/histoire/` | Chapitres Histoire |
-| GET | `/api/deploy-logs/` | Logs de déploiement |
 | POST | `/api/contact/` | Envoyer un message |
 | POST | `/api/auth/init` | Initialiser admin |
 | POST | `/api/auth/login` | Connexion (JWT) |
@@ -151,8 +148,6 @@ Default credentials (from `.env`):
 | POST | `/api/histoire/` | Créer un chapitre |
 | PUT | `/api/histoire/{id}` | Modifier un chapitre |
 | DELETE | `/api/histoire/{id}` | Supprimer un chapitre |
-| POST | `/api/deploy-logs/` | Créer un log |
-| DELETE | `/api/deploy-logs/{id}` | Supprimer un log |
 
 ### Autres
 | Méthode | Endpoint | Description |
@@ -173,7 +168,6 @@ Default credentials (from `.env`):
 - **Technology** — Technologies used in projects (name, icon)
 - **ContactMessage** — Contact form submissions (name, email, message, is_read)
 - **HistoireChapter** — Story chapters (year, title, description, chapter_order)
-- **DeployLog** — Deployment/activity logs (message, status)
 
 ### Key Relationships
 - **Project ↔ Technology**: Many-to-Many via `project_technologies` association table
@@ -193,7 +187,6 @@ uvicorn app.main:app --reload --port 8000
 curl http://localhost:8000/api/profile/
 curl http://localhost:8000/api/skills/
 curl http://localhost:8000/api/projects/
-curl http://localhost:8000/api/deploy-logs/
 curl http://localhost:8000/health
 ```
 

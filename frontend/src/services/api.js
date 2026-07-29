@@ -48,11 +48,6 @@ export const createChapter = (data) => api.post('/histoire/', data);
 export const updateChapter = (id, data) => api.put(`/histoire/${id}`, data);
 export const deleteChapter = (id) => api.delete(`/histoire/${id}`);
 
-// Deploy Logs
-export const getDeployLogs = () => api.get('/deploy-logs/');
-export const createDeployLog = (data) => api.post('/deploy-logs/', data);
-export const deleteDeployLog = (id) => api.delete(`/deploy-logs/${id}`);
-
 // Auth
 export const login = (email, password) =>
   api.post('/auth/login', { email, password });

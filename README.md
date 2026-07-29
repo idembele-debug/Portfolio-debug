@@ -84,7 +84,7 @@ Portfolio-debug/
 ### Dashboard (Admin)
 - Page de login avec JWT
 - Gestion des messages reçus
-- Gestion des projets, compétences, logs de déploiement
+- Gestion des projets, compétences
 - Routes protégées par authentification
 
 ### Design System
@@ -107,14 +107,14 @@ frontend/
 │   ├── assets/                # Images statiques (hero.png, react.svg, vite.svg)
 │   ├── components/
 │   │   ├── layout/            # Header, Footer
-│   │   ├── sections/          # Hero, Projects, About, Contact, Histoire, DeployLog
+│   │   ├── sections/          # Hero, Projects, About, Contact, Histoire
 │   │   └── ui/                # Button, Modal, Card, Loader
 │   ├── pages/                 # Home, Login, Dashboard, NotFound
 │   ├── hooks/                 # Custom hooks
 │   ├── context/               # ThemeContext (dark/light), LanguageContext (FR/EN)
 │   ├── services/
 │   │   ├── api.js             # Instance Axios centralisée (baseURL: /api)
-│   │   └── api/               # Services par ressource (auth, profile, project, skill, contact, deployLog, histoire)
+│   │   └── api/               # Services par ressource (auth, profile, project, skill, contact, histoire)
 │   ├── constants/             # Traductions FR/EN
 │   ├── App.jsx                # React Router (root)
 │   └── main.jsx               # Point d'entrée
@@ -135,15 +135,14 @@ backend/
 │   │   │   ├── skills.py         # Skills CRUD
 │   │   │   ├── projects.py       # Projects CRUD + filtre par type
 │   │   │   ├── contact.py        # Contact messages (POST public, GET/PUT/DELETE auth)
-│   │   │   ├── histoire.py       # Histoire chapters CRUD
-│   │   │   └── deploy_logs.py    # Deploy logs CRUD
+│   │   │   └── histoire.py       # Histoire chapters CRUD
 │   │   └── router.py             # Main router (inclut toutes les routes)
 │   ├── core/
 │   │   ├── config.py             # Settings (pydantic-settings)
 │   │   └── security.py           # JWT, password hashing (passlib+bcrypt)
 │   ├── database/
 │   │   └── session.py            # SQLAlchemy engine & session
-│   ├── models/                   # SQLAlchemy models (8 modèles)
+│   ├── models/                   # SQLAlchemy models (7 modèles)
 │   │   ├── user.py               # User (admin auth)
 │   │   ├── profile.py            # Profile (nom, titre, bio, email, etc.)
 │   │   ├── skill.py              # Skill (nom, catégorie, ordre)
@@ -151,9 +150,8 @@ backend/
 │   │   ├── technology.py         # Technology
 │   │   ├── project_technology.py # Association table (Project <-> Technology)
 │   │   ├── contact_message.py    # Contact messages (nom, email, message, lu/non lu)
-│   │   ├── histoire_chapter.py   # Histoire chapters (année, titre, description, ordre)
-│   │   └── deploy_log.py         # Deploy logs (message, statut, date)
-│   ├── schemas/                  # Pydantic schemas (8 schémas)
+│   │   └── histoire_chapter.py   # Histoire chapters (année, titre, description, ordre)
+│   ├── schemas/                  # Pydantic schemas (7 schémas)
 │   ├── constants/                # (réservé) roles.py, status.py, permissions.py
 │   ├── uploads/                  # profile/, projects/, cv/
 │   └── main.py                   # FastAPI app entry point
@@ -231,7 +229,6 @@ VITE_APP_NAME=ISSA D. Portfolio
 | GET | `/api/skills/` | Liste des compétences |
 | GET | `/api/projects/` | Liste des projets (filtre: ?project_type=academic) |
 | GET | `/api/histoire/` | Chapitres Histoire |
-| GET | `/api/deploy-logs/` | Logs de déploiement |
 | POST | `/api/contact/` | Envoyer un message |
 | POST | `/api/auth/init` | Initialiser admin |
 | POST | `/api/auth/login` | Connexion (JWT) |
@@ -254,8 +251,6 @@ VITE_APP_NAME=ISSA D. Portfolio
 | POST | `/api/histoire/` | Créer un chapitre |
 | PUT | `/api/histoire/{id}` | Modifier un chapitre |
 | DELETE | `/api/histoire/{id}` | Supprimer un chapitre |
-| POST | `/api/deploy-logs/` | Créer un log |
-| DELETE | `/api/deploy-logs/{id}` | Supprimer un log |
 
 ### Autres
 | Méthode | Endpoint | Description |
@@ -330,7 +325,6 @@ cd frontend && npm run build
 curl http://localhost:8000/api/profile/
 curl http://localhost:8000/api/skills/
 curl http://localhost:8000/api/projects/
-curl http://localhost:8000/api/deploy-logs/
 curl http://localhost:8000/health
 ```
 

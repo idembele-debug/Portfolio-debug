@@ -3,7 +3,6 @@ import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import HeroSection from '../components/sections/Hero';
 import ProjectsSection from '../components/sections/Projects';
-import DeployLogSection from '../components/sections/DeployLog';
 import AboutOverlay from '../components/sections/About';
 import ContactOverlay from '../components/sections/Contact';
 import HistoireOverlay from '../components/sections/Histoire';
@@ -29,7 +28,6 @@ export default function Home() {
       <main>
         <HeroSection />
         <ProjectsSection />
-        <DeployLogSection />
       </main>
 
       <Footer />
