@@ -9,9 +9,7 @@ Design inspiré du terminal, avec thème dark/light, animations fluides et expé
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS v4
 - **Routing**: React Router DOM
-- **HTTP Client**: Axios (modular services)
-- **Forms**: React Hook Form
-- **Validation**: Zod
+- **HTTP Client**: Axios (modular services per resource)
 
 ## 📂 Project Structure
 
@@ -19,8 +17,11 @@ Design inspiré du terminal, avec thème dark/light, animations fluides et expé
 frontend/
 ├── public/
 │   ├── ISSAD.pdf              # CV téléchargeable
-│   └── issaphoto.JPG          # Photo de profil
+│   ├── issaphoto.JPG          # Photo de profil
+│   ├── favicon.svg            # Favicon
+│   └── icons.svg              # Icônes SVG
 ├── src/
+│   ├── assets/                # Images statiques (hero.png, react.svg, vite.svg)
 │   ├── components/
 │   │   ├── layout/            # Header, Footer (each with index.jsx)
 │   │   ├── sections/          # Hero, Projects, About, Contact, Histoire, DeployLog
@@ -30,13 +31,13 @@ frontend/
 │   │   ├── Login.jsx          # Admin login
 │   │   ├── Dashboard.jsx      # Admin dashboard (protected)
 │   │   └── NotFound.jsx       # 404 page
+│   ├── hooks/                 # Custom hooks
 │   ├── context/
 │   │   ├── ThemeContext.jsx    # Dark/light theme
 │   │   └── LanguageContext.jsx # FR/EN translations
 │   ├── services/
 │   │   ├── api.js             # Centralized Axios instance (base URL, auth interceptor)
 │   │   └── api/               # Modular API services per resource
-│   │       ├── index.js       # Re-exports all services
 │   │       ├── auth.js        # login, initAdmin, getMe
 │   │       ├── profile.js     # getProfile, updateProfile
 │   │       ├── project.js     # CRUD projects
@@ -51,6 +52,7 @@ frontend/
 │   └── index.css              # Global styles + Tailwind + CSS variables + Design System
 ├── index.html
 ├── vite.config.js
+├── eslint.config.js
 ├── package.json
 └── .env.example
 ```
@@ -112,19 +114,21 @@ npm run preview
 ## 🎨 Features
 
 ### Hero Section
-- Titre impactant "Étudiant en Cycle Ingénieur d'État" avec effet typographique
+- Titre impactant avec effet typographique
 - Terminal interactif avec 22 commandes disponibles
 - Raccourci clavier `/` pour focus terminal
 - Animations d'entrée fluides
+- Changement de thème et langue depuis le terminal
 
 ### About Overlay
 - Photo de profil avec effet glassmorphism
-- Cartes d'information non-cliquables (Email, Téléphone, Localisation, GitHub, Langues)
-- LinkedIn reste cliquable
+- Données chargées depuis l'API (GET /api/profile/) avec fallback statique
+- Compétences chargées depuis l'API (GET /api/skills/) avec fallback statique
+- Cartes d'information non-cliquables (Email, Téléphone, Localisation, Langues)
+- LinkedIn cliquable
 - 3 actions principales : Télécharger CV, Lire mon histoire, Me contacter
-- Grille de compétences avec effets de survol
 
-### Mon Histoire
+### Mon Histoire (Histoire)
 - Timeline chronologique avec marqueurs visuels
 - Contenu chargé depuis l'API ou fallback local
 - Traductions FR/EN
@@ -132,15 +136,14 @@ npm run preview
 ### Projets
 - Grille responsive 1/2/3 colonnes
 - Filtres par type (Tous, Académique, Personnel)
-- Aperçus de code avec dégradés de couleurs
 - Tags technologiques
-- Projets statiques intégrés (Portfolio, AidFinder)
+- Données chargées depuis l'API (GET /api/projects/)
 
 ### Contact
 - Formulaire de contact avec validation
+- Envoi via API (POST /api/contact/)
 - Cartes d'information non-cliquables (sauf LinkedIn)
-- Statut de disponibilité
-- Liens sociaux GitHub/LinkedIn
+- Statut de disponibilité dynamique
 
 ### Terminal
 - 22 commandes interactives
@@ -148,6 +151,12 @@ npm run preview
 - Changement de langue FR/EN
 - Téléchargement du CV
 - Ouverture des réseaux sociaux
+
+### Dashboard (Admin)
+- Page de login avec JWT
+- Gestion des messages reçus
+- Gestion des projets, compétences, logs de déploiement
+- Routes protégées par authentification
 
 ### Design System
 - Espacements cohérents (section, card, content, button, grid)
@@ -159,10 +168,10 @@ npm run preview
 - **Dark/Light theme** with CSS variables
 - **Interactive terminal** in hero section
 - **Project filtering** by type
-- **Contact form** with validation
+- **Contact form** with API integration
 - **Responsive design** (mobile, tablet, desktop)
 - **CSS animations** (fadeIn, fadeUp, photoReveal)
-- **API integration** with modular Axios services
-- **React Router** for client-side navigation
+- **API integration** with modular Axios services (profile, skills, projects, contact, histoire, deploy-logs, auth)
+- **React Router** for client-side navigation (Home, Login, Dashboard, 404)
 - **100% JavaScript** (no TypeScript)
 - **FR/EN translations** for all UI text

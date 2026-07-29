@@ -11,7 +11,7 @@ const translations = {
     'theme.light': '◐',
 
     // Hero / Terminal
-    'hero.subtitle': '// Étudiant en Ingénierie · Développement IA & Logiciel',
+    'hero.subtitle': 'Étudiant en Ingénierie · Développement IA & Logiciel',
     'hero.title.line1': 'Étudiant en',
     'hero.title.line2': '<span class="text-[var(--accent)]">Cycle</span><br />Ingénieur<br />d\'<span class="text-[var(--accent2)]">État</span>',
     'hero.title.tagline': 'Des lignes de code à l\'impact réel.',
@@ -19,8 +19,8 @@ const translations = {
     'hero.focus': 'pour cibler le terminal',
     'hero.since': 'depuis 2023',
     'terminal.header': 'issa@portfolio:~',
-    'terminal.welcome': '# ISSA Dembélé — Portfolio Terminal v2.0',
-    'terminal.system.ready': '✓ Système prêt. Bienvenue sur mon portfolio interactif.',
+    'terminal.welcome': ' ISSA Dembélé — Portfolio Terminal v2.0',
+    'terminal.system.ready': 'Système prêt. Bienvenue sur mon portfolio interactif.',
     'terminal.loading': '⟳ Chargement des données... OK',
     'terminal.help.hint': 'Tapez "help" pour voir toutes les commandes disponibles.',
     'terminal.not_found': 'Commande introuvable :',

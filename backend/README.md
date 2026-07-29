@@ -1,15 +1,15 @@
 # Portfolio API — Backend
 
-Backend API for the ISSA D. Portfolio application built with FastAPI.
+Backend API for the ISSA D. Portfolio application built with **FastAPI + SQLAlchemy + SQLite**.
 
 ## 🚀 Tech Stack
 
 - **Framework**: FastAPI
 - **ORM**: SQLAlchemy 2.0 (with relationships)
-- **Database**: PostgreSQL
+- **Database**: SQLite (development) / PostgreSQL (production)
 - **Migrations**: Alembic
-- **Auth**: JWT (python-jose)
-- **Validation**: Pydantic v2
+- **Auth**: JWT (PyJWT + passlib + bcrypt)
+- **Validation**: Pydantic v2 (pydantic-settings)
 
 ## 📂 Project Structure
 
@@ -18,37 +18,42 @@ backend/
 ├── app/
 │   ├── api/
 │   │   ├── routes/
-│   │   │   ├── auth.py           # Authentication (login, JWT)
-│   │   │   ├── profile.py        # Profile CRUD
+│   │   │   ├── auth.py           # Authentication (login, init, JWT, /me)
+│   │   │   ├── profile.py        # Profile GET/PUT
 │   │   │   ├── skills.py         # Skills CRUD
-│   │   │   ├── projects.py       # Projects CRUD
-│   │   │   ├── contact.py        # Contact messages
-│   │   │   ├── histoire.py       # Histoire chapters
-│   │   │   └── deploy_logs.py    # Deploy logs
-│   │   └── router.py             # Main router
+│   │   │   ├── projects.py       # Projects CRUD + filtre par type
+│   │   │   ├── contact.py        # Contact messages (POST public, GET/PUT/DELETE auth)
+│   │   │   ├── histoire.py       # Histoire chapters CRUD
+│   │   │   └── deploy_logs.py    # Deploy logs CRUD
+│   │   └── router.py             # Main router (inclut toutes les routes)
 │   ├── core/
 │   │   ├── config.py             # Settings (pydantic-settings)
-│   │   └── security.py           # JWT, password hashing
+│   │   └── security.py           # JWT, password hashing (passlib+bcrypt)
 │   ├── database/
 │   │   └── session.py            # SQLAlchemy engine & session
-│   ├── models/                   # SQLAlchemy models
-│   │   ├── user.py               # User (admin)
-│   │   ├── profile.py            # Profile
-│   │   ├── skill.py              # Skill
-│   │   ├── project.py            # Project (with M2M to Technology)
+│   ├── models/                   # SQLAlchemy models (8 modèles)
+│   │   ├── user.py               # User (admin auth)
+│   │   ├── profile.py            # Profile (nom, titre, bio, email, etc.)
+│   │   ├── skill.py              # Skill (nom, catégorie, ordre)
+│   │   ├── project.py            # Project (titre, description, type, tags, URLs)
 │   │   ├── technology.py         # Technology
 │   │   ├── project_technology.py # Association table (Project <-> Technology)
 │   │   ├── contact_message.py    # Contact messages
 │   │   ├── histoire_chapter.py   # Histoire chapters
 │   │   └── deploy_log.py         # Deploy logs
-│   ├── schemas/                  # Pydantic schemas
-│   ├── constants/                # roles.py, status.py, permissions.py
+│   ├── schemas/                  # Pydantic schemas (8 schémas)
+│   ├── constants/                # (réservé) roles.py, status.py, permissions.py
 │   ├── uploads/                  # profile/, projects/, cv/
-│   ├── crud/                     # Generic CRUD base
 │   └── main.py                   # FastAPI app entry point
 ├── alembic/                      # Database migrations
+│   └── versions/
+│       └── 7d9418e99f45_initial_migration.py
+├── seed.py                       # Script d'amorçage des données
 ├── requirements.txt
-└── .env.example
+├── portfolio.db                  # Base SQLite (développement)
+├── .env.example
+├── alembic.ini
+└── README.md
 ```
 
 ## 🛠️ Installation
@@ -58,6 +63,7 @@ cd backend
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+cp .env.example .env
 ```
 
 ## ⚙️ Configuration
@@ -69,20 +75,28 @@ cp .env.example .env
 ```
 
 **Required variables:**
-- `DATABASE_URL`: PostgreSQL connection string
+- `DATABASE_URL`: SQLite (default) or PostgreSQL connection string
 - `SECRET_KEY`: JWT secret key (change in production)
 
 ## 📦 Database Setup
 
-```bash
-# Create the database
-createdb portfolio_db
+### Option 1: Auto-create (recommended)
+Tables are auto-created on first startup via `Base.metadata.create_all()`.
 
-# Run migrations
+### Option 2: Alembic migrations
+```bash
 alembic upgrade head
 ```
 
-Tables are also auto-created on first startup via `Base.metadata.create_all()`.
+### Seed data
+```bash
+python seed.py
+```
+
+This creates:
+- 1 Profile (ISSA Dembélé)
+- 13 Skills (Python, JavaScript, React, FastAPI, etc.)
+- 1 Admin user (i.dembele@hestim.ma / admin123)
 
 ## 🚀 Running
 
@@ -91,10 +105,11 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 **API Docs:** http://localhost:8000/docs
+**ReDoc:** http://localhost:8000/redoc
 
 ## 🔐 Default Admin
 
-After starting the server, initialize the admin:
+After seeding, the admin is already created. To initialize manually:
 
 ```bash
 curl -X POST http://localhost:8000/api/auth/init
@@ -106,39 +121,81 @@ Default credentials (from `.env`):
 
 ## 📡 API Endpoints
 
-### Public
-- `GET /api/profile/` — Get profile
-- `GET /api/skills/` — List skills
-- `GET /api/projects/` — List projects
-- `GET /api/histoire/` — List histoire chapters
-- `GET /api/deploy-logs/` — List deploy logs
-- `POST /api/contact/` — Send contact message
+### Public (no auth required)
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/profile/` | Profil portfolio |
+| GET | `/api/skills/` | Liste des compétences |
+| GET | `/api/projects/` | Liste des projets (filtre: ?project_type=academic) |
+| GET | `/api/histoire/` | Chapitres Histoire |
+| GET | `/api/deploy-logs/` | Logs de déploiement |
+| POST | `/api/contact/` | Envoyer un message |
+| POST | `/api/auth/init` | Initialiser admin |
+| POST | `/api/auth/login` | Connexion (JWT) |
 
-### Auth Required
-- `POST /api/auth/login` — Get JWT token
-- `PUT /api/profile/` — Update profile
-- `POST/PUT/DELETE /api/skills/` — Manage skills
-- `POST/PUT/DELETE /api/projects/` — Manage projects
-- `GET/PUT/DELETE /api/contact/` — Manage messages
-- `POST/PUT/DELETE /api/histoire/` — Manage chapters
-- `POST/DELETE /api/deploy-logs/` — Manage logs
+### Authentifié (Bearer Token required)
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/auth/me` | Infos utilisateur |
+| PUT | `/api/profile/` | Mettre à jour le profil |
+| POST | `/api/skills/` | Créer une compétence |
+| PUT | `/api/skills/{id}` | Modifier une compétence |
+| DELETE | `/api/skills/{id}` | Supprimer une compétence |
+| GET | `/api/projects/{id}` | Détail d'un projet |
+| POST | `/api/projects/` | Créer un projet |
+| PUT | `/api/projects/{id}` | Modifier un projet |
+| DELETE | `/api/projects/{id}` | Supprimer un projet |
+| GET | `/api/contact/` | Messages reçus |
+| PUT | `/api/contact/{id}/read` | Marquer comme lu |
+| DELETE | `/api/contact/{id}` | Supprimer un message |
+| POST | `/api/histoire/` | Créer un chapitre |
+| PUT | `/api/histoire/{id}` | Modifier un chapitre |
+| DELETE | `/api/histoire/{id}` | Supprimer un chapitre |
+| POST | `/api/deploy-logs/` | Créer un log |
+| DELETE | `/api/deploy-logs/{id}` | Supprimer un log |
+
+### Autres
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/` | Infos API |
+| GET | `/health` | Health check |
+| GET | `/docs` | Swagger UI |
+| GET | `/redoc` | ReDoc UI |
+| GET | `/uploads/*` | Fichiers statiques (CV, photos) |
 
 ## 🗄️ SQLAlchemy Models & Relationships
 
 ### Current Models
-- **User** — Admin authentication
-- **Profile** — Portfolio profile information
-- **Skill** — Technical skills with categories
-- **Project** — Portfolio projects
-- **Technology** — Technologies used in projects
-- **ContactMessage** — Contact form submissions
-- **HistoireChapter** — Story chapters
-- **DeployLog** — Deployment/activity logs
+- **User** — Admin authentication (email, hashed_password, is_admin)
+- **Profile** — Portfolio profile (full_name, title, headline, bio, email, phone, location, social URLs, photo, resume)
+- **Skill** — Technical skills (name, category, icon, order)
+- **Project** — Portfolio projects (title, description, project_type, github_url, live_url, image_url, tags, order)
+- **Technology** — Technologies used in projects (name, icon)
+- **ContactMessage** — Contact form submissions (name, email, message, is_read)
+- **HistoireChapter** — Story chapters (year, title, description, chapter_order)
+- **DeployLog** — Deployment/activity logs (message, status)
 
 ### Key Relationships
 - **Project ↔ Technology**: Many-to-Many via `project_technologies` association table
   - A project can use multiple technologies
   - A technology can be used in multiple projects
+
+## 🧪 Scripts Utiles
+
+```bash
+# Amorcer la base de données
+python seed.py
+
+# Lancer le serveur
+uvicorn app.main:app --reload --port 8000
+
+# Vérifier les endpoints
+curl http://localhost:8000/api/profile/
+curl http://localhost:8000/api/skills/
+curl http://localhost:8000/api/projects/
+curl http://localhost:8000/api/deploy-logs/
+curl http://localhost:8000/health
+```
 
 ## 🚢 Deployment (Render)
 
@@ -147,5 +204,6 @@ Default credentials (from `.env`):
 3. Set:
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-4. Add environment variables
-5. Deploy 🚀
+4. Add environment variables (DATABASE_URL PostgreSQL, SECRET_KEY, ADMIN_EMAIL, ADMIN_PASSWORD)
+5. Run `python seed.py` after first deploy
+6. Deploy 🚀
