@@ -12,7 +12,7 @@ export default function Header({ onOpenAbout, onOpenContact }) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 sm:px-8 lg:px-12 xl:px-16 h-16 bg-[var(--bg)]/92 backdrop-blur-md border-b border-[var(--border)]">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16 h-14 sm:h-16 bg-[var(--bg)]/92 backdrop-blur-md border-b border-[var(--border)]">
       <a href="#" className="font-mono font-black text-sm sm:text-base md:text-lg tracking-widest uppercase no-underline text-[var(--text)] whitespace-nowrap">
         <span className="text-[var(--accent)]"></span> Portfolio ISSA D<span className="text-[var(--accent2)]">.</span> <span className="text-[var(--accent)]"></span>
       </a>

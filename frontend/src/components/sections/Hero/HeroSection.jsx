@@ -1,13 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { useTheme } from '../../../context/ThemeContext';
-
-const HISTORY_CHAPTERS = [
-  { year: '2023', titleKey: 'histoire.chapter.2023', descKey: 'histoire.chapter.2023.desc' },
-  { year: '2024', titleKey: 'histoire.chapter.2024', descKey: 'histoire.chapter.2024.desc' },
-  { year: '2025', titleKey: 'histoire.chapter.2025', descKey: 'histoire.chapter.2025.desc' },
-  { year: '2026', titleKey: 'histoire.chapter.2026', descKey: 'histoire.chapter.2026.desc' },
-];
+import { getChapters } from '../../../services/api/histoire';
+import { getProjects } from '../../../services/api/project';
+import { getSkills } from '../../../services/api/skill';
 
 const AVAILABLE_CMDS = [
   ['help', 'terminal.help.desc'],
@@ -46,6 +42,9 @@ function createInitialLines(t) {
 export default function HeroSection() {
   const [lines, setLines] = useState(() => createInitialLines((k) => k));
   const [input, setInput] = useState('');
+  const [histoireChapters, setHistoireChapters] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [skills, setSkills] = useState([]);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
   const { t, lang, setLang } = useLanguage();
@@ -57,6 +56,18 @@ export default function HeroSection() {
   useEffect(() => { tRef.current = t; }, [t]);
   useEffect(() => { langRef.current = lang; }, [lang]);
   useEffect(() => { isDarkRef.current = isDark; }, [isDark]);
+
+  useEffect(() => {
+    getChapters()
+      .then(({ data }) => setHistoireChapters(Array.isArray(data) ? data : []))
+      .catch(() => setHistoireChapters([]));
+    getProjects()
+      .then(({ data }) => setProjects(Array.isArray(data) ? data : []))
+      .catch(() => setProjects([]));
+    getSkills()
+      .then(({ data }) => setSkills(Array.isArray(data) ? data : []))
+      .catch(() => setSkills([]));
+  }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -111,12 +122,24 @@ export default function HeroSection() {
     } else if (command === 'whoami' || command === 'about') {
       output(`<span class="t-white">${curT('terminal.about.text')}</span>`);
     } else if (command === 'history') {
-      HISTORY_CHAPTERS.forEach((ch) => {
-        output(`<span class="t-accent">▸ ${ch.year}</span> — <span class="t-white">${curT(ch.titleKey)}</span>`);
-        output(`  <span class="t-muted">${curT(ch.descKey)}</span>`);
-      });
+      if (histoireChapters.length === 0) {
+        output(`<span class="t-yellow">${curT('histoire.empty')}</span>`);
+      } else {
+        histoireChapters.forEach((ch) => {
+          output(`<span class="t-accent">▸ ${ch.title}</span>`);
+          const excerpt = ch.content.split('\n\n')[0]?.slice(0, 120) || '';
+          output(`  <span class="t-muted">${excerpt}...</span>`);
+        });
+        output(`<span class="t-accent">${curT('about.story.link')} → ${curT('about.title')}</span>`);
+      }
     } else if (command === 'projects') {
-      output(`<span class="t-yellow">${curT('terminal.projects.empty')}</span>`);
+      if (projects.length === 0) {
+        output(`<span class="t-yellow">${curT('terminal.projects.empty')}</span>`);
+      } else {
+        projects.forEach((p) => {
+          output(`<span class="t-accent">▸ [${p.project_type}]</span> <span class="t-white">${p.title}</span>`);
+        });
+      }
     } else if (command === 'skills') {
       output(`<span class="t-green">${curT('terminal.skills.list')}</span>`);
     } else if (command === 'contact') {
@@ -163,7 +186,7 @@ export default function HeroSection() {
     } else {
       output(`<span class="t-red">${curT('terminal.not_found')} ${cmd}</span>`);
     }
-  }, [addOutput, toggle, setLang]);
+  }, [addOutput, toggle, setLang, histoireChapters, projects]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -179,29 +202,32 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-start px-6 sm:px-8 lg:px-12 xl:px-16 pt-28 pb-24 max-w-7xl mx-auto w-full">
+    <div className="min-h-screen flex flex-col justify-center items-start px-5 sm:px-8 lg:px-12 xl:px-16 pt-24 sm:pt-28 pb-20 sm:pb-28 max-w-7xl mx-auto w-full">
       {/* Section label */}
-      <p className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-6">
+      <p className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-6 sm:mb-8">
         <span className="text-[var(--accent)]">// </span>{t('hero.subtitle')}
       </p>
 
-      {/* Impactful title - big, bold, wow effect */}
-      <h1 className="font-sans text-[clamp(34px,7vw,88px)] font-extrabold leading-[1.04] tracking-[-0.04em] max-w-[900px] mb-3">
+      {/* Impactful title */}
+      <h1 className="font-sans text-[clamp(32px,6.5vw,84px)] font-extrabold leading-[1.05] tracking-[-0.04em] max-w-[920px] mb-4 sm:mb-6">
         <span className="text-[var(--text)]">{t('hero.title.line1')} </span>
         <span dangerouslySetInnerHTML={{ __html: t('hero.title.line2') }} />
       </h1>
 
       {/* Tagline */}
-      <p className="text-[14px] text-[var(--muted)] mb-8 max-w-[600px] leading-relaxed">
+      <p className="text-[13px] sm:text-[14px] text-[var(--muted)] mb-8 sm:mb-10 max-w-[640px] leading-relaxed">
         {t('hero.title.tagline')}
       </p>
 
       {/* Meta info */}
-      <div className="text-[11px] text-[var(--muted)] mb-12 flex items-center gap-4 flex-wrap">
+      <div className="text-[11px] text-[var(--muted)] mb-16 sm:mb-20 md:mb-24 flex items-center gap-3 sm:gap-4 flex-wrap">
         <span>{t('hero.since')}</span>
         <span
-          className="bg-[var(--bg3)] border border-[var(--border)] px-2.5 py-1 rounded text-[11px] cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors select-none"
+          className="bg-[var(--bg3)] border border-[var(--border)] px-2.5 py-1.5 rounded text-[11px] cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors select-none"
           onClick={focusTerminal}
+          onKeyDown={(e) => e.key === 'Enter' && focusTerminal()}
+          role="button"
+          tabIndex={0}
         >
           {t('hero.press')} <kbd className="font-mono border border-[var(--border)] rounded px-1 mx-0.5">/</kbd> {t('hero.focus')}
         </span>

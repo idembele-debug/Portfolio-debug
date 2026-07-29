@@ -1,65 +1,56 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getProfile } from '../../../services/api/profile';
 import { getSkills } from '../../../services/api/skill';
+import { getChapters } from '../../../services/api/histoire';
 import { useLanguage } from '../../../context/LanguageContext';
 
-const PROFILE_PHOTO = '/issaphoto.JPG';
 const CV_PDF = '/ISSAD.pdf';
 
-const INFO_CARDS = [
-  { labelKey: 'about.email', value: 'i.dembele@hestim.ma', icon: '✉', href: null },
-  { labelKey: 'about.telephone', value: '+212 690611402', icon: '📞', href: null },
-  { labelKey: 'about.location', value: 'Casablanca, Maroc', icon: '📍', href: null },
-  { labelKey: 'about.linkedin', value: 'ISSA D DEMBELE', icon: '🔗', href: 'https://www.linkedin.com/in/issa-d-dembele-a46a34356/' },
-  { labelKey: 'about.languages', value: 'Français · Anglais · Bambara', icon: '🌍', href: null },
+const SKILL_CATEGORIES = [
+  { key: 'langage_framework', labelKey: 'about.skills.langages' },
+  { key: 'outil', labelKey: 'about.skills.outils' },
+  { key: 'soft_skill', labelKey: 'about.skills.soft' },
 ];
 
-const SKILLS_LIST = [
-  'Python', 'JavaScript', 'React', 'FastAPI', 'SQL', 'PHP', 'C',
-  'Tailwind CSS', 'TypeScript', 'Node.js', 'Git', 'Docker', 'Linux'
-];
-
-function getCurrentStatus() {
-  const month = new Date().getMonth() + 1;
-  if (month >= 6 && month <= 9) {
-    return { type: 'internship', emoji: '🟢', key: 'about.status.internship' };
+function getCurrentStatus(available) {
+  if (available) {
+    return { key: 'about.status.internship', color: 'text-[var(--green)]' };
   }
-  return { type: 'collaboration', emoji: '🔵', key: 'about.status.collaboration' };
+  return { key: 'about.status.collaboration', color: 'text-[var(--accent)]' };
 }
 
-export default function AboutOverlay({ isOpen, onClose, onOpenContact }) {
+export default function AboutOverlay({ isOpen, onClose, onOpenContact, onOpenHistoire }) {
   const [profile, setProfile] = useState(null);
   const [skills, setSkills] = useState([]);
+  const [storyExcerpt, setStoryExcerpt] = useState('');
   const { t } = useLanguage();
-  const status = getCurrentStatus();
 
   useEffect(() => {
     if (!isOpen) return;
-
     let mounted = true;
-    const loadData = async () => {
-      try {
-        const [profileRes, skillsRes] = await Promise.all([getProfile(), getSkills()]);
-        if (mounted) {
-          setProfile(profileRes.data);
-          setSkills(skillsRes.data);
+    Promise.all([getProfile(), getSkills(), getChapters()])
+      .then(([profileRes, skillsRes, histoireRes]) => {
+        if (!mounted) return;
+        setProfile(profileRes.data);
+        setSkills(Array.isArray(skillsRes.data) ? skillsRes.data : []);
+        const chapters = Array.isArray(histoireRes.data) ? histoireRes.data : [];
+        if (chapters.length > 0) {
+          const first = chapters.sort((a, b) => a.chapter_order - b.chapter_order)[0];
+          setStoryExcerpt(first.content.split('\n\n')[0]?.slice(0, 280) || '');
         }
-      } catch {
-        // API not available
-      }
-    };
-    loadData();
+      })
+      .catch(() => {});
     return () => { mounted = false; };
   }, [isOpen]);
 
   const handleDownloadCV = useCallback(() => {
     const link = document.createElement('a');
-    link.href = CV_PDF;
+    link.href = profile?.resume_url || CV_PDF;
     link.download = 'ISSAD_Dembele_CV.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, []);
+  }, [profile]);
 
   const handleContact = useCallback(() => {
     onClose();
@@ -68,140 +59,93 @@ export default function AboutOverlay({ isOpen, onClose, onOpenContact }) {
 
   const handleOpenStory = useCallback(() => {
     onClose();
-    // Close about overlay, parent Home component will detect and open HistoireOverlay
-    // The parent needs a callback - we'll use a custom event to signal
-    window.dispatchEvent(new CustomEvent('openHistoire'));
-  }, [onClose]);
+    onOpenHistoire();
+  }, [onClose, onOpenHistoire]);
 
   if (!isOpen) return null;
+
+  const status = getCurrentStatus(profile?.available_for_work);
+  const bioParagraphs = profile?.bio?.split('\n\n') || [t('about.bio1'), t('about.bio2')];
+
+  const infoCards = [
+    { labelKey: 'about.email', value: profile?.email, accent: true },
+    { labelKey: 'about.telephone', value: profile?.phone },
+    { labelKey: 'about.location', value: profile?.location ? `${profile.location} 🇲🇦` : null },
+    { labelKey: 'about.linkedin', value: 'ISSA D DEMBELE', href: profile?.linkedin_url, accent: true },
+    { labelKey: 'about.languages', value: t('about.languages.value') },
+    { labelKey: 'about.status', value: t(status.key), accent: true, status: true },
+  ];
 
   return (
     <div className="fixed inset-0 z-50 bg-[var(--bg)] overflow-y-auto animate-fadeIn">
       <button
+        type="button"
         onClick={onClose}
         className="fixed top-4 right-4 md:top-8 md:right-12 bg-transparent border border-[var(--border)] text-[var(--muted)] font-mono text-xs px-3.5 py-1.5 rounded cursor-pointer z-50 hover:text-[var(--text)] hover:border-[var(--text)] transition-all"
       >
         {t('close')}
       </button>
 
-      {/* ===== MAIN CONTAINER ===== */}
-      <div className="w-full max-w-[1280px] mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-20 md:py-28">
-        {/* Section header */}
-        <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-12 flex items-center gap-3 animate-fadeUp">
-          <span className="block w-7 h-px bg-[var(--border)]"></span>
+      <div className="w-full max-w-[1280px] mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-20 md:py-28 lg:py-32">
+        <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-10 sm:mb-14 flex items-center gap-3">
+          <span className="block w-7 h-px bg-[var(--border)]" />
           <span className="text-[var(--accent)] mr-1">#</span> {t('about.title')}
         </div>
 
-        {/* ===== TWO-COLUMN LAYOUT ===== */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1.6fr] gap-10 md:gap-14 lg:gap-16 xl:gap-20 items-start">
-          {/* ===== LEFT COLUMN: PHOTO ===== */}
-          <div className="lg:sticky lg:top-28 lg:pl-4 xl:pl-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(280px,380px)_1fr] gap-10 md:gap-14 lg:gap-16 xl:gap-20 items-start">
+          {/* Photo */}
+          <div className="lg:sticky lg:top-28">
             <div className="relative group">
-              {/* Decorative circles */}
-              <div className="absolute -top-5 -right-5 w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-[var(--accent)] opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"></div>
-              <div className="absolute -bottom-4 -left-4 w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-[var(--accent2)] opacity-15 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none"></div>
+              <div className="absolute -top-5 -right-5 w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-[var(--accent)] opacity-20 pointer-events-none" />
+              <div className="absolute -bottom-4 -left-4 w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-[var(--accent2)] opacity-15 pointer-events-none" />
 
-              {/* Photo container with glass effect */}
-              <div className="relative rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--bg2)] animate-photoReveal group-hover:shadow-[0_0_40px_rgba(56,189,248,0.15)] transition-shadow duration-500">
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10"
-                  style={{
-                    background: 'radial-gradient(circle at 50% 50%, rgba(56,189,248,0.08) 0%, transparent 70%)'
-                  }}
-                ></div>
-
+              <div className="relative rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--bg2)] animate-photoReveal">
                 <img
-                  src={PROFILE_PHOTO}
-                  alt="ISSA Dembélé — Photo de profil"
+                  src={profile?.photo_url || '/issaphoto.JPG'}
+                  alt={profile?.full_name || 'ISSA Dembélé'}
                   loading="lazy"
-                  className="w-full block transition-all duration-700 ease-out group-hover:scale-[1.03] group-hover:rotate-[1deg]"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentNode.querySelector('.fallback').style.display = 'flex';
-                  }}
+                  className="w-full block aspect-[3/4] object-cover"
                 />
-                <div className="fallback" style={{ display: 'none' }}>
-                  <div className="h-64 sm:h-80 flex items-center justify-center bg-gradient-to-br from-[var(--bg3)] to-[var(--bg2)] text-[var(--muted)] text-sm">
-                    📸 Photo
-                  </div>
-                </div>
-
-                {/* Gradient overlay + name */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex items-end p-5 sm:p-6">
-                  <div className="text-xs text-white/70 leading-relaxed">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5 sm:p-6">
+                  <div>
                     <strong className="block font-sans text-lg sm:text-xl font-bold text-white mb-1">
-                      {profile?.full_name || 'ISSA Dembélé'}
+                      {profile?.full_name || 'Issa D. DEMBELE'}
                     </strong>
-                    {profile?.title || t('hero.subtitle')}
+                    <span className="text-xs text-white/70">{profile?.title || t('about.photo.subtitle')}</span>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick info card — plain text, no link styling except LinkedIn */}
-            <div className="mt-8 bg-[var(--bg2)]/80 backdrop-blur-sm border border-[var(--border)] rounded-xl p-5 text-xs text-[var(--muted)] leading-loose transition-all duration-300 hover:border-[var(--accent)]/30 hover:shadow-[0_0_20px_rgba(56,189,248,0.06)]">
-              <div className="flex items-center gap-2.5 mb-4">
-                <span className={`w-2.5 h-2.5 rounded-full ${status.type === 'internship' ? 'bg-[var(--green)]' : 'bg-[var(--accent)]'} animate-pulse`}></span>
-                <span className="text-[var(--text)] font-medium text-sm">
-                  {status.emoji} {t(status.key)}
-                </span>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-[var(--accent)] w-16 shrink-0 text-[11px] uppercase tracking-wider">{t('about.email')}:</span>
-                  <span className="text-[13px] text-[var(--text)]">i.dembele@hestim.ma</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[var(--accent)] w-16 shrink-0 text-[11px] uppercase tracking-wider">{t('about.location')}:</span>
-                  <span className="text-[13px] text-[var(--text)]">Casablanca, Maroc</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[var(--accent)] w-16 shrink-0 text-[11px] uppercase tracking-wider">{t('about.linkedin')}:</span>
-                  <a
-                    href="https://www.linkedin.com/in/issa-d-dembele-a46a34356/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[13px] text-[var(--text)] no-underline hover:text-[var(--accent)] transition-colors"
-                  >
-                    ISSA D DEMBELE
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[var(--accent)] w-16 shrink-0 text-[11px] uppercase tracking-wider">{t('about.github')}:</span>
-                  <span className="text-[13px] text-[var(--text)]">idembele-debug</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ===== RIGHT COLUMN: CONTENT ===== */}
-          <div className="min-w-0">
-            {/* Heading */}
-            <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-3 animate-fadeUp">
-              <span className="text-[var(--accent)]">// </span>{t('about.heading')}
-            </div>
-            <h2 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] mb-2 animate-fadeUp" style={{ animationDelay: '0.05s' }}>
-              {profile?.full_name || 'ISSA Dembélé'}
-            </h2>
-            <p className="text-[13px] text-[var(--muted)] mb-10 animate-fadeUp" style={{ animationDelay: '0.1s' }}>
-              {profile?.title || t('hero.subtitle')}
-            </p>
-
-            {/* Bio section */}
-            <div className="text-[13px] sm:text-[14px] text-[var(--muted)] leading-[1.85] sm:leading-[1.9] tracking-[0.01em] mb-10 space-y-4 animate-fadeUp max-w-prose" style={{ animationDelay: '0.15s' }}>
-              <p>{t('about.bio1')}</p>
-              <p>{t('about.bio2')}</p>
-              <p>{t('about.bio3')}</p>
+          {/* Content */}
+          <div className="min-w-0 space-y-8 sm:space-y-10">
+            <div>
+              <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-3">
+                <span className="text-[var(--accent)]">// </span>{t('about.heading')}
+              </div>
+              <h2 className="font-sans text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-[-0.03em] mb-3 leading-tight">
+                {profile?.full_name || 'Issa D. DEMBELE'}
+              </h2>
+              <p className="text-[13px] sm:text-sm text-[var(--muted)] leading-relaxed max-w-prose">
+                {profile?.headline || t('about.headline.fallback')}
+              </p>
             </div>
 
-            {/* Info Cards Grid — plain text, no link styling except LinkedIn */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mb-10 animate-fadeUp" style={{ animationDelay: '0.2s' }}>
-              {INFO_CARDS.map((card, i) => (
+            <div className="text-[13px] sm:text-[14px] text-[var(--muted)] leading-[1.85] space-y-4 max-w-prose">
+              {bioParagraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+
+            {/* Info grid 3x2 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              {infoCards.map((card, i) => (
                 <div
                   key={i}
-                  className="group/card bg-[var(--bg2)]/60 backdrop-blur-sm border border-[var(--border)] rounded-xl p-4 sm:p-5 transition-all duration-300 hover:border-[var(--accent)]/40 hover:bg-[var(--bg2)] hover:shadow-[0_0_25px_rgba(56,189,248,0.05)] flex flex-col justify-center min-h-[80px] sm:min-h-[90px]"
+                  className="bg-[var(--bg2)]/80 border border-[var(--border)] rounded-xl p-4 sm:p-5 min-h-[88px] flex flex-col justify-center"
                 >
-                  <div className="text-[10px] text-[var(--muted)] uppercase tracking-[0.08em] mb-2 flex items-center gap-1.5">
-                    <span className="text-[var(--accent)]">{card.icon}</span>
+                  <div className="text-[10px] text-[var(--muted)] uppercase tracking-[0.08em] mb-2">
                     {t(card.labelKey)}
                   </div>
                   {card.href ? (
@@ -209,83 +153,77 @@ export default function AboutOverlay({ isOpen, onClose, onOpenContact }) {
                       href={card.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[13px] sm:text-[14px] text-[var(--text)] no-underline hover:text-[var(--accent)] transition-colors block truncate font-medium"
+                      className="text-[13px] text-[var(--accent)] no-underline hover:underline font-medium truncate"
                     >
                       {card.value}
                     </a>
                   ) : (
-                    <div className="text-[13px] sm:text-[14px] text-[var(--text)] font-medium">{card.value}</div>
+                    <div className={`text-[13px] font-medium truncate ${card.status ? status.color : card.accent ? 'text-[var(--accent)]' : 'text-[var(--text)]'}`}>
+                      {card.value}
+                    </div>
                   )}
                 </div>
               ))}
-
-              {/* Status card */}
-              <div className="group/card bg-[var(--bg2)]/60 backdrop-blur-sm border border-[var(--border)] rounded-xl p-4 sm:p-5 transition-all duration-300 hover:border-[var(--accent)]/40 hover:bg-[var(--bg2)] hover:shadow-[0_0_25px_rgba(56,189,248,0.05)] flex flex-col justify-center min-h-[80px] sm:min-h-[90px]">
-                <div className="text-[10px] text-[var(--muted)] uppercase tracking-[0.08em] mb-2 flex items-center gap-1.5">
-                  <span className="text-[var(--accent)]">📌</span>
-                  {t('about.status')}
-                </div>
-                <div className="flex items-center gap-2.5 text-[13px] sm:text-[14px]">
-                  <span className={`w-2.5 h-2.5 rounded-full ${status.type === 'internship' ? 'bg-[var(--green)]' : 'bg-[var(--accent)]'} animate-pulse`}></span>
-                  <span className="text-[var(--text)] font-medium">{t(status.key)}</span>
-                </div>
-              </div>
             </div>
 
-            {/* Skills */}
-            <div className="mb-10 animate-fadeUp" style={{ animationDelay: '0.25s' }}>
-              <div className="text-[11px] text-[var(--muted)] uppercase tracking-[0.08em] mb-4">
-                <span className="text-[var(--accent)]">▸ </span>{t('about.skills')}
-              </div>
-              <div className="flex flex-wrap gap-2.5 sm:gap-3">
-                {(skills.length > 0 ? skills : SKILLS_LIST.map((s) => ({ name: s }))).map((skill, i) => (
-                  <span
-                    key={skill.id || i}
-                    className="group/tag relative text-[11px] sm:text-[12px] px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-[var(--border)] text-[var(--muted)] transition-all duration-300 cursor-default overflow-hidden hover:border-[var(--accent)]/50 hover:text-[var(--text)] hover:shadow-[0_0_15px_rgba(56,189,248,0.08)]"
-                  >
-                    <span className="absolute inset-0 opacity-0 group-hover/tag:opacity-100 transition-opacity duration-300"
-                      style={{
-                        background: 'radial-gradient(circle at center, rgba(56,189,248,0.12) 0%, transparent 70%)'
-                      }}
-                    ></span>
-                    <span className="relative z-10 group-hover/tag:text-[var(--accent)] transition-colors duration-300">
-                      {skill.name}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            </div>
+            {/* Skills by category */}
+            {SKILL_CATEGORIES.map(({ key, labelKey }) => {
+              const items = skills.filter((s) => s.category === key);
+              if (items.length === 0) return null;
+              return (
+                <div key={key}>
+                  <div className="text-[11px] text-[var(--muted)] uppercase tracking-[0.08em] mb-4">
+                    <span className="text-[var(--accent)]">▸ </span>{t(labelKey)}
+                  </div>
+                  <div className="flex flex-wrap gap-2.5">
+                    {items.map((skill) => (
+                      <span
+                        key={skill.id}
+                        className="text-[11px] sm:text-[12px] px-3.5 py-2 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)]/40 hover:text-[var(--text)] transition-colors"
+                      >
+                        {skill.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
 
-            {/* CTA Buttons — 3 actions: Download CV, Read Story, Contact */}
-            <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-10 animate-fadeUp" style={{ animationDelay: '0.3s' }}>
+            {/* CTA buttons */}
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
               <button
+                type="button"
                 onClick={handleDownloadCV}
-                className="group/btn relative overflow-hidden bg-[var(--accent)] text-[#000] border-none font-mono text-[12px] sm:text-[13px] font-bold px-6 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:opacity-90 hover:shadow-[0_0_25px_rgba(56,189,248,0.3)] active:scale-[0.97] w-full sm:w-auto text-center"
+                className="bg-[var(--accent)] text-black border-none font-mono text-[12px] sm:text-[13px] font-bold px-6 py-3 rounded-lg cursor-pointer hover:opacity-90 transition-opacity w-full sm:w-auto"
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  <span>📄</span>
-                  {t('about.download_cv')}
-                </span>
+                {t('about.download_cv')}
               </button>
-
               <button
-                onClick={handleOpenStory}
-                className="group/btn bg-transparent text-[var(--muted)] border border-[var(--border)] font-mono text-[12px] sm:text-[13px] px-6 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:text-[var(--text)] hover:border-[var(--accent)] hover:shadow-[0_0_20px_rgba(56,189,248,0.06)] active:scale-[0.97] w-full sm:w-auto text-center"
-              >
-                <span className="flex items-center justify-center gap-2">
-                  <span>📖</span>
-                  {t('about.story.btn')}
-                </span>
-              </button>
-
-              <button
+                type="button"
                 onClick={handleContact}
-                className="group/btn bg-transparent text-[var(--muted)] border border-[var(--border)] font-mono text-[12px] sm:text-[13px] px-6 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:text-[var(--text)] hover:border-[var(--accent)] hover:shadow-[0_0_20px_rgba(56,189,248,0.06)] active:scale-[0.97] w-full sm:w-auto text-center"
+                className="bg-transparent text-[var(--muted)] border border-[var(--border)] font-mono text-[12px] sm:text-[13px] px-6 py-3 rounded-lg cursor-pointer hover:text-[var(--text)] hover:border-[var(--accent)] transition-all w-full sm:w-auto"
               >
-                <span className="flex items-center justify-center gap-2">
-                  <span>✉</span>
-                  {t('about.contact.btn')}
-                </span>
+                {t('about.contact.btn')}
+              </button>
+            </div>
+
+            {/* Story encart */}
+            <div className="border border-[var(--border)] border-l-[3px] border-l-[var(--accent)] rounded-xl p-5 sm:p-6 bg-[var(--bg2)]/50">
+              <div className="text-[10px] text-[var(--accent2)] uppercase tracking-[0.1em] mb-3">
+                {t('about.story.label')}
+              </div>
+              <h3 className="font-sans text-lg sm:text-xl font-bold text-[var(--text)] mb-3">
+                {t('about.story.heading')}
+              </h3>
+              <p className="text-[13px] text-[var(--muted)] leading-relaxed mb-4 max-w-prose">
+                {storyExcerpt || t('about.story.excerpt')}
+              </p>
+              <button
+                type="button"
+                onClick={handleOpenStory}
+                className="text-[13px] text-[var(--accent)] bg-transparent border-none font-mono cursor-pointer hover:underline p-0"
+              >
+                {t('about.story.link')} →
               </button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from app.database import get_db
 from app.models.skill import Skill
 from app.schemas.skill import SkillCreate, SkillUpdate, SkillResponse
@@ -11,8 +11,11 @@ router = APIRouter(prefix="/skills", tags=["Skills"])
 
 
 @router.get("/", response_model=List[SkillResponse])
-def get_skills(db: Session = Depends(get_db)):
-    return db.query(Skill).order_by(Skill.order).all()
+def get_skills(category: Optional[str] = None, db: Session = Depends(get_db)):
+    query = db.query(Skill).order_by(Skill.order)
+    if category:
+        query = query.filter(Skill.category == category)
+    return query.all()
 
 
 @router.post("/", response_model=SkillResponse)
