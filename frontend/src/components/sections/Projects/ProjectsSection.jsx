@@ -68,13 +68,13 @@ export default function ProjectsSection() {
   const typeLabel = (type) => TYPE_LABELS[lang]?.[type] || type;
 
   return (
-    <section id="projects" className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 xl:px-16 py-20 sm:py-24 md:py-32">
-      <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-10 sm:mb-12 flex items-center gap-3">
+    <section id="projects" className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 xl:px-16 py-20 sm:py-24 md:py-28">
+      <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-12 sm:mb-14 flex items-center gap-3">
         <span className="block w-7 h-px bg-[var(--border)]" />
         <span className="text-[var(--accent)] mr-1">#</span> {t('projects.title')}
       </div>
 
-      <div className="flex items-center gap-3 sm:gap-4 mb-12 sm:mb-14 flex-wrap">
+      <div className="flex items-center gap-3 sm:gap-4 mb-16 sm:mb-18 flex-wrap">
         {['all', 'academic', 'personal'].map((f) => (
           <button
             key={f}
@@ -97,7 +97,7 @@ export default function ProjectsSection() {
       {loading ? (
         <div className="text-center py-20 text-[var(--muted)] text-sm">{t('terminal.loading')}</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 lg:gap-8">
           {filtered.length === 0 ? (
             <div className="col-span-full text-center py-20 text-[var(--muted)] text-sm">
               {t('terminal.projects.empty')}
@@ -110,8 +110,11 @@ export default function ProjectsSection() {
               return (
                 <article
                   key={project.id}
-                  className="group bg-[var(--bg2)] rounded-2xl border border-[var(--border)] overflow-hidden transition-all duration-300 hover:border-[var(--accent)]/50 hover:shadow-[0_0_50px_rgba(56,189,248,0.12)] hover:-translate-y-1 flex flex-col"
+                  className="group relative bg-[var(--bg2)] rounded-2xl border border-[var(--border)] overflow-hidden transition-all duration-300 hover:border-[var(--accent)]/30 hover:shadow-[0_0_60px_rgba(56,189,248,0.15)] hover:-translate-y-1 flex flex-col"
                 >
+                  {/* Animated top bar on hover */}
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-left" />
+                  
                   <div className={`relative h-[160px] sm:h-[180px] lg:h-[200px] overflow-hidden bg-gradient-135 ${previewClass}`}>
                     <div
                       className="absolute inset-0 opacity-[0.04]"
@@ -120,7 +123,7 @@ export default function ProjectsSection() {
                         backgroundSize: '24px 24px',
                       }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-5 lg:p-6">
+                    <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-6 lg:p-7">
                       <pre className="font-mono text-[9px] sm:text-[10px] lg:text-[11px] text-white/50 leading-[1.8] sm:leading-[1.9] whitespace-pre-wrap text-left w-full">
                         {project.preview_code || t('projects.no_preview')}
                       </pre>
@@ -128,30 +131,30 @@ export default function ProjectsSection() {
                     <div className="absolute bottom-0 inset-x-0 h-14 sm:h-16 bg-gradient-to-t from-[var(--bg2)] to-transparent" />
                   </div>
 
-                  <div className="p-4 sm:p-5 lg:p-6 flex flex-col flex-1 gap-3 sm:gap-3.5">
-                    <span className="text-[9px] sm:text-[10px] text-[var(--muted)] uppercase tracking-[0.08em]">
-                      {typeLabel(project.project_type)}
-                    </span>
-
-                    <div className="flex items-start justify-between gap-2 sm:gap-3">
-                      <h3 className="font-sans font-bold text-[14px] sm:text-[15px] lg:text-base text-[var(--text)] leading-snug group-hover:text-[var(--accent)] transition-colors">
-                        {project.title}
-                      </h3>
-                      <span className={`text-[8px] sm:text-[9px] px-1.5 sm:px-2 py-0.5 rounded border uppercase tracking-[0.08em] whitespace-nowrap shrink-0 font-medium ${typeStyle}`}>
+                  <div className="p-4 sm:p-5 lg:p-6 flex flex-col flex-1 gap-3 sm:gap-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="text-[9px] sm:text-[10px] text-[var(--muted)] uppercase tracking-[0.08em]">
+                        {typeLabel(project.project_type)}
+                      </span>
+                      <span className={`text-[8px] sm:text-[9px] px-2 py-0.5 rounded border uppercase tracking-[0.08em] whitespace-nowrap shrink-0 font-medium ${typeStyle}`}>
                         {project.project_type}
                       </span>
                     </div>
+
+                    <h3 className="font-sans font-bold text-[14px] sm:text-[15px] lg:text-[16px] text-[var(--text)] leading-snug group-hover:text-[var(--accent)] transition-colors">
+                      {project.title}
+                    </h3>
 
                     <p className="text-[11px] sm:text-[12px] lg:text-[13px] text-[var(--muted)] leading-relaxed flex-1">
                       {project.description}
                     </p>
 
                     {project.tags && (
-                      <div className="flex flex-wrap gap-2 pt-1">
+                      <div className="flex flex-wrap gap-2 pt-1 sm:pt-2">
                         {project.tags.split(',').map((tag, i) => (
                           <span
                             key={i}
-                            className={`text-[10px] px-2.5 py-1 rounded-md font-medium border ${getTagClass(tag)}`}
+                            className={`text-[10px] sm:text-[11px] px-2.5 py-1 rounded-md font-medium border ${getTagClass(tag)}`}
                           >
                             {tag.trim()}
                           </span>

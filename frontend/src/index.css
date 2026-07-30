@@ -117,6 +117,10 @@ body {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
+@keyframes photoHover {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
 
 .animate-fadeUp { animation: fadeUp 0.6s ease 0.3s both; }
 .animate-fadeIn { animation: fadeIn 0.3s ease; }

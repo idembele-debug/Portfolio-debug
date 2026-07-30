@@ -31,7 +31,7 @@ export default function Footer() {
   return (
     <>
       {stacks.length > 0 && (
-        <div className="border-t border-[var(--border)] overflow-hidden py-5 sm:py-6">
+        <div className="border-t border-[var(--border)] overflow-hidden py-6 sm:py-7">
           <div className="relative">
             <div className="marquee-track">
               <div className="marquee-group text-[11px] text-[var(--muted)]">
@@ -45,7 +45,7 @@ export default function Footer() {
         </div>
       )}
 
-      <footer className="border-t border-[var(--border)] px-5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-7 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[var(--muted)] gap-4">
+      <footer className="border-t border-[var(--border)] px-5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[var(--muted)] gap-4">
         <div className="text-center sm:text-left">
           <span>{t('footer.copyright', { year: new Date().getFullYear() })}</span>
         </div>

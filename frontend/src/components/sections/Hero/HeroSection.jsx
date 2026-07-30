@@ -202,25 +202,25 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-start px-5 sm:px-8 lg:px-12 xl:px-16 pt-20 sm:pt-24 pb-20 sm:pb-28 max-w-7xl mx-auto w-full">
+    <div className="min-h-screen flex flex-col justify-center items-start px-5 sm:px-8 lg:px-12 xl:px-16 pt-20 sm:pt-24 pb-20 sm:pb-24 max-w-7xl mx-auto w-full">
       {/* Section label */}
-      <p className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-8 sm:mb-10">
+      <p className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-10 sm:mb-12">
         <span className="text-[var(--accent)]"># </span>{t('hero.subtitle')}
       </p>
 
       {/* Impactful title */}
-      <h1 className="font-sans text-[clamp(36px,7vw,96px)] font-extrabold leading-[1.02] tracking-[-0.05em] max-w-[1000px] mb-6 sm:mb-8">
+      <h1 className="font-sans text-[clamp(36px,7vw,96px)] font-extrabold leading-[1.02] tracking-[-0.05em] max-w-[1000px] mb-8 sm:mb-10">
         <span className="text-[var(--text)]">{t('hero.title.line1')} </span>
         <span dangerouslySetInnerHTML={{ __html: t('hero.title.line2') }} />
       </h1>
 
       {/* Tagline */}
-      <p className="text-[14px] sm:text-[15px] text-[var(--muted)] mb-10 sm:mb-12 max-w-[700px] leading-relaxed">
+      <p className="text-[14px] sm:text-[15px] text-[var(--muted)] mb-12 sm:mb-14 max-w-[700px] leading-relaxed">
         {t('hero.title.tagline')}
       </p>
 
       {/* Meta info */}
-      <div className="text-[11px] text-[var(--muted)] mb-20 sm:mb-24 md:mb-28 flex items-center gap-3 sm:gap-4 flex-wrap">
+      <div className="text-[11px] text-[var(--muted)] mb-16 sm:mb-20 md:mb-24 flex items-center gap-3 sm:gap-4 flex-wrap">
         <span>{t('hero.since')}</span>
         <span
           className="bg-[var(--bg3)] border border-[var(--border)] px-3 py-1.5 rounded text-[11px] cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors select-none"

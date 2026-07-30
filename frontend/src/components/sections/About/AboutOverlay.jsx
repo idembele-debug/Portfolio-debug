@@ -81,32 +81,26 @@ export default function AboutOverlay({ isOpen, onClose, onOpenContact, onOpenHis
       <button
         type="button"
         onClick={onClose}
-        className="fixed top-4 right-4 md:top-8 md:right-12 bg-transparent border border-[var(--border)] text-[var(--muted)] font-mono text-xs px-3.5 py-1.5 rounded cursor-pointer z-50 hover:text-[var(--text)] hover:border-[var(--text)] transition-all"
+        className="fixed top-4 right-4 md:top-8 md:right-12 lg:right-16 bg-transparent border border-[var(--border)] text-[var(--muted)] font-mono text-xs px-3.5 py-1.5 rounded cursor-pointer z-50 hover:text-[var(--text)] hover:border-[var(--text)] transition-all"
       >
         {t('close')}
       </button>
 
-      <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 py-20 md:py-28 lg:py-32">
-        <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-10 sm:mb-12 md:mb-14 flex items-center gap-3">
+      <div className="w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 xl:px-16 py-20 md:py-28 lg:py-32">
+        <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-12 sm:mb-14 md:mb-16 flex items-center gap-3">
           <span className="block w-7 h-px bg-[var(--border)]" />
           <span className="text-[var(--accent)] mr-1">#</span> {t('about.title')}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(280px,380px)_1fr] gap-10 md:gap-14 lg:gap-18 xl:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(280px,380px)_1fr] gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-start">
           {/* Photo */}
           <div className="lg:sticky lg:top-24">
             <div className="relative group">
               <div className="absolute -top-4 -right-4 sm:-top-5 sm:-right-5 lg:-top-6 lg:-right-6 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full border-2 border-[var(--accent)] opacity-20 pointer-events-none" />
               <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 lg:-bottom-5 lg:-left-5 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full border-2 border-[var(--accent2)] opacity-15 pointer-events-none" />
 
-              <div className="relative rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--bg2)] animate-photoReveal">
-                <img
-                  src={profile?.photo_url}
-                  alt={profile?.full_name}
-                  loading="lazy"
-                  className="w-full block aspect-[3/4] object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4 sm:p-5 lg:p-6">
+              <div className="relative rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--bg2)] animate-photoReveal group">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10 flex items-end p-4 sm:p-5 lg:p-6 transition-opacity duration-300 group-hover:opacity-80">
                   <div>
                     <strong className="block font-sans text-base sm:text-lg lg:text-xl font-bold text-white mb-1">
                       {profile?.full_name}
@@ -114,17 +108,24 @@ export default function AboutOverlay({ isOpen, onClose, onOpenContact, onOpenHis
                     <span className="text-[10px] sm:text-xs text-white/70">{profile?.title}</span>
                   </div>
                 </div>
+                <img
+                  src={profile?.photo_url}
+                  alt={profile?.full_name}
+                  loading="lazy"
+                  className="w-full block aspect-[3/4] object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/0 via-transparent to-[var(--accent2)]/0 group-hover:from-[var(--accent)]/10 group-hover:to-[var(--accent2)]/10 transition-all duration-500 pointer-events-none" />
               </div>
             </div>
           </div>
 
           {/* Content */}
-          <div className="min-w-0 space-y-8 sm:space-y-10 lg:space-y-12">
+          <div className="min-w-0 space-y-10 sm:space-y-12 lg:space-y-14">
             <div>
-              <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-3 sm:mb-4">
+              <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-4 sm:mb-5">
                 <span className="text-[var(--accent)]">// </span>{t('about.heading')}
               </div>
-              <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl lg:text-[2.75rem] font-extrabold tracking-[-0.03em] mb-3 sm:mb-4 leading-tight">
+              <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl lg:text-[2.75rem] font-extrabold tracking-[-0.03em] mb-4 sm:mb-5 leading-tight">
                 {profile?.full_name}
               </h2>
               <p className="text-[12px] sm:text-[13px] lg:text-sm text-[var(--muted)] leading-relaxed max-w-prose">
@@ -146,7 +147,7 @@ export default function AboutOverlay({ isOpen, onClose, onOpenContact, onOpenHis
             </div>
 
             {/* Info grid 3x2 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-7">
               {infoCards.map((card, i) => (
                 <div
                   key={i}
@@ -179,10 +180,10 @@ export default function AboutOverlay({ isOpen, onClose, onOpenContact, onOpenHis
               if (items.length === 0) return null;
               return (
                 <div key={key}>
-                  <div className="text-[11px] text-[var(--muted)] uppercase tracking-[0.08em] mb-4 sm:mb-5">
+                  <div className="text-[11px] text-[var(--muted)] uppercase tracking-[0.08em] mb-5 sm:mb-6">
                     <span className="text-[var(--accent)]">▸ </span>{t(labelKey)}
                   </div>
-                  <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <div className="flex flex-wrap gap-2.5 sm:gap-3">
                     {items.map((skill) => (
                       <span
                         key={skill.id}

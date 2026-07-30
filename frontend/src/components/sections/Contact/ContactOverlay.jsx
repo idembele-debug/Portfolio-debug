@@ -39,20 +39,20 @@ export default function ContactOverlay({ isOpen, onClose }) {
       <button
         type="button"
         onClick={onClose}
-        className="fixed top-4 right-4 md:top-8 md:right-12 bg-transparent border border-[var(--border)] text-[var(--muted)] font-mono text-xs px-3.5 py-1.5 rounded cursor-pointer z-50 hover:text-[var(--text)] hover:border-[var(--text)] transition-all"
+        className="fixed top-4 right-4 md:top-8 md:right-12 lg:right-16 bg-transparent border border-[var(--border)] text-[var(--muted)] font-mono text-xs px-3.5 py-1.5 rounded cursor-pointer z-50 hover:text-[var(--text)] hover:border-[var(--text)] transition-all"
       >
         {t('close')}
       </button>
 
-      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 py-20 md:py-28 lg:py-32">
-        <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-10 sm:mb-12 md:mb-14 flex items-center gap-3">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 xl:px-16 py-20 md:py-28 lg:py-32">
+        <div className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-12 sm:mb-14 md:mb-16 flex items-center gap-3">
           <span className="block w-7 h-px bg-[var(--border)]" />
           <span className="text-[var(--accent)] mr-1">#</span> {t('contact.title')}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 md:gap-14 lg:gap-16 xl:gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-10 md:gap-14 lg:gap-16 xl:gap-20 items-start">
           {/* Left column */}
-          <div className="space-y-10 sm:space-y-12 lg:space-y-14">
+          <div className="space-y-12 sm:space-y-14 lg:space-y-16">
             <p className="text-[13px] sm:text-[14px] lg:text-[15px] text-[var(--text)] italic leading-relaxed max-w-md">
               {t('contact.intro')}
             </p>
