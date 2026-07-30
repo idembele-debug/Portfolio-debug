@@ -10,7 +10,6 @@ Portfolio-debug/
 ├── frontend/          # React 19 + Vite + Tailwind CSS v4 (JavaScript)
 ├── backend/           # FastAPI + SQLAlchemy + SQLite (avec seed data)
 ├── backup-assets/     # Fichiers originaux (HTML, images, PDF)
-│   ├── portfolio-issad.html   # Portfolio HTML original (NE PAS MODIFIER)
 │   ├── images/
 │   └── pdf/
 ├── Maquette/          # Maquettes UI
@@ -47,6 +46,7 @@ Portfolio-debug/
 - Raccourci clavier `/` pour focus terminal
 - Animations d'entrée fluides
 - Changement de thème et langue depuis le terminal
+- Design responsive optimisé (320px à 1536px)
 
 ### About Overlay
 - Photo de profil avec effet glassmorphism
@@ -91,7 +91,8 @@ Portfolio-debug/
 - Espacements cohérents (section, card, content, button, grid)
 - Palette de couleurs terminal (bg, accent, muted, green, red, yellow)
 - Animations fluides (fadeUp, fadeIn, photoReveal)
-- Responsive : Desktop, Laptop, Tablet, Mobile
+- Responsive optimisé : 320px, 375px, 390px, 430px, 640px, 768px, 1024px, 1280px, 1536px
+- Breakpoints : mobile, tablet, laptop, desktop
 
 ## 📁 Structure détaillée
 

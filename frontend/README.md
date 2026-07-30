@@ -121,15 +121,15 @@ npm run preview
 
 ### About Overlay
 - Photo de profil avec effet glassmorphism
-- Données chargées depuis l'API (GET /api/profile/) avec fallback statique
-- Compétences chargées depuis l'API (GET /api/skills/) avec fallback statique
+- Données chargées depuis l'API (GET /api/profile/)
+- Compétences chargées depuis l'API (GET /api/skills/)
 - Cartes d'information non-cliquables (Email, Téléphone, Localisation, Langues)
 - LinkedIn cliquable
 - 3 actions principales : Télécharger CV, Lire mon histoire, Me contacter
 
 ### Mon Histoire (Histoire)
 - Timeline chronologique avec marqueurs visuels
-- Contenu chargé depuis l'API ou fallback local
+- Contenu chargé depuis l'API
 - Traductions FR/EN
 
 ### Projets
@@ -161,7 +161,8 @@ npm run preview
 - Espacements cohérents (section, card, content, button, grid)
 - Palette de couleurs terminal (bg, accent, muted, green, red, yellow)
 - Animations fluides (fadeUp, fadeIn, photoReveal)
-- Responsive : Desktop, Laptop, Tablet, Mobile
+- Responsive optimisé : 320px, 375px, 390px, 430px, 640px, 768px, 1024px, 1280px, 1536px
+- Breakpoints : mobile, tablet, laptop, desktop
 
 ### Core
 - **Dark/Light theme** with CSS variables

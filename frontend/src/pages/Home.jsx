@@ -19,7 +19,7 @@ export default function Home() {
         onOpenContact={() => setContactOpen(true)}
       />
 
-      <main>
+      <main className="pt-16 sm:pt-[4.5rem]">
         <HeroSection />
         <ProjectsSection />
       </main>

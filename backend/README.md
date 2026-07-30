@@ -93,7 +93,9 @@ python seed.py
 
 This creates:
 - 1 Profile (ISSA Dembélé)
-- 13 Skills (Python, JavaScript, React, FastAPI, etc.)
+- 35 Skills (Python, JavaScript, React, FastAPI, etc. - répartis en catégories)
+- 6 Projects (Academic & Personal)
+- 6 Histoire chapters
 - 1 Admin user (i.dembele@hestim.ma / admin123)
 
 ## 🚀 Running

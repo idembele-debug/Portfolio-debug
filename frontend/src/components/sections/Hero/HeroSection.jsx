@@ -202,49 +202,49 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-start px-5 sm:px-8 lg:px-12 xl:px-16 pt-24 sm:pt-28 pb-20 sm:pb-28 max-w-7xl mx-auto w-full">
+    <div className="min-h-screen flex flex-col justify-center items-start px-5 sm:px-8 lg:px-12 xl:px-16 pt-20 sm:pt-24 pb-20 sm:pb-28 max-w-7xl mx-auto w-full">
       {/* Section label */}
-      <p className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-6 sm:mb-8">
-        <span className="text-[var(--accent)]">// </span>{t('hero.subtitle')}
+      <p className="text-[11px] text-[var(--muted)] tracking-[0.1em] uppercase mb-8 sm:mb-10">
+        <span className="text-[var(--accent)]"># </span>{t('hero.subtitle')}
       </p>
 
       {/* Impactful title */}
-      <h1 className="font-sans text-[clamp(32px,6.5vw,84px)] font-extrabold leading-[1.05] tracking-[-0.04em] max-w-[920px] mb-4 sm:mb-6">
+      <h1 className="font-sans text-[clamp(36px,7vw,96px)] font-extrabold leading-[1.02] tracking-[-0.05em] max-w-[1000px] mb-6 sm:mb-8">
         <span className="text-[var(--text)]">{t('hero.title.line1')} </span>
         <span dangerouslySetInnerHTML={{ __html: t('hero.title.line2') }} />
       </h1>
 
       {/* Tagline */}
-      <p className="text-[13px] sm:text-[14px] text-[var(--muted)] mb-8 sm:mb-10 max-w-[640px] leading-relaxed">
+      <p className="text-[14px] sm:text-[15px] text-[var(--muted)] mb-10 sm:mb-12 max-w-[700px] leading-relaxed">
         {t('hero.title.tagline')}
       </p>
 
       {/* Meta info */}
-      <div className="text-[11px] text-[var(--muted)] mb-16 sm:mb-20 md:mb-24 flex items-center gap-3 sm:gap-4 flex-wrap">
+      <div className="text-[11px] text-[var(--muted)] mb-20 sm:mb-24 md:mb-28 flex items-center gap-3 sm:gap-4 flex-wrap">
         <span>{t('hero.since')}</span>
         <span
-          className="bg-[var(--bg3)] border border-[var(--border)] px-2.5 py-1.5 rounded text-[11px] cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors select-none"
+          className="bg-[var(--bg3)] border border-[var(--border)] px-3 py-1.5 rounded text-[11px] cursor-pointer hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors select-none"
           onClick={focusTerminal}
           onKeyDown={(e) => e.key === 'Enter' && focusTerminal()}
           role="button"
           tabIndex={0}
         >
-          {t('hero.press')} <kbd className="font-mono border border-[var(--border)] rounded px-1 mx-0.5">/</kbd> {t('hero.focus')}
+          {t('hero.press')} <kbd className="font-mono border border-[var(--border)] rounded px-1.5 mx-0.5">/</kbd> {t('hero.focus')}
         </span>
       </div>
 
       {/* Terminal */}
       <div className="w-full max-w-[740px] animate-fadeUp" onClick={focusTerminal}>
         <div className="bg-[var(--bg2)] border border-[var(--border)] rounded-xl overflow-hidden shadow-[0_28px_72px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center gap-2 px-4 py-2.5 bg-[var(--bg3)] border-b border-[var(--border)]">
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-[var(--bg3)] border-b border-[var(--border)]">
             <span className="w-3 h-3 rounded-full bg-[#ff5f57]"></span>
             <span className="w-3 h-3 rounded-full bg-[#febc2e]"></span>
             <span className="w-3 h-3 rounded-full bg-[#28c840]"></span>
-            <span className="flex-1 text-center text-[11px] text-[var(--muted)]">{t('terminal.header')}</span>
+            <span className="flex-1 text-center text-[10px] sm:text-[11px] text-[var(--muted)]">{t('terminal.header')}</span>
           </div>
           <div
             ref={terminalRef}
-            className="p-4 sm:p-5 min-h-[220px] max-h-[420px] overflow-y-auto text-[13px] leading-[1.9] font-mono"
+            className="p-3 sm:p-4 md:p-5 min-h-[180px] sm:min-h-[220px] max-h-[350px] sm:max-h-[420px] overflow-y-auto text-[12px] sm:text-[13px] leading-[1.8] sm:leading-[1.9] font-mono"
           >
             {lines.map((line, i) => (
               <span key={i} className="terminal-line" dangerouslySetInnerHTML={{ __html: line.html }} />
